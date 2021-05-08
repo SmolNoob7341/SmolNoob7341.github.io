@@ -1,9 +1,53 @@
-<!DOCTYPE>
-<hmtl>
+<!DOCTYPE html>
+<html>
 <head>
-<b6>HELLO JUPITER!!</b6>
+ <title>Canvas</title>
 </head>
 <body>
-<p>hi saturn!</p> 
-</body> 
+<canvas id="canvas" width="630" height="430"></canvas>
+ <script>
+ window.addEventListener('keydown',this.check,false);
+ const context = canvas.getContext('2d');
+  var carX = 0;
+  var carY = 0; 
+  function check(e) {
+    var code = e.keyCode;
+    switch (code) {
+        case 37: carX -= 10; break; //Left key
+        case 38: carY -= 10; break; //Up key
+        case 39: carX += 10; break; //Right key
+        case 40: carY += 10; break; //Down key
+        case 32: carX -= carX, carY -= carY;
+    }
+    console.log("coords", carX, carY);
+    var drawCar = function(x, y){
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    ctx.fillRect(30+x, 0+y, 70, 10); 
+    ctx.fillRect(20+x, 10+y, 10, 10); 
+    ctx.fillRect(10+x, 20+y, 10, 30); 
+    ctx.fillRect(20+x, 50+y, 20, 10); 
+    ctx.fillRect(40+x, 40+y, 10, 10);
+    ctx.fillRect(40+x, 60+y, 10, 10); 
+    ctx.fillRect(50+x, 50+y, 50, 10); 
+    ctx.fillRect(100+x, 40+y, 10, 10); 
+    ctx.fillRect(100+x, 60+y, 10, 10); 
+    ctx.fillRect(110+x, 50+y, 40, 10);
+    ctx.fillRect(150+x, 30+y, 10, 20);
+    ctx.fillRect(110+x, 20+y, 40, 10); 
+    ctx.fillRect(100+x, 10+y, 10, 10); 
+    ctx.fillRect(30+x, 0+y, 10, 10);
+  }
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      drawCar(carX, carY);
+    //carRight(530, 380);
+}
+
+//ctx.fillRect(left-right, 0, 10, 10); 
+//ctx.fillRect(0, top-down, 10, 10); 
+//ctx.fillRect(0, 0, left-rightsize, 10); 
+//ctx.fillRect(0, 0, 10, top-down size); 
+</script>
+</body>
 </html>
+
