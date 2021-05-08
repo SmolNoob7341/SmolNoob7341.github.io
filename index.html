@@ -17,7 +17,7 @@
         case 38: carY -= 10; break; //Up key
         case 39: carX += 10; break; //Right key
         case 40: carY += 10; break; //Down key
-        case 32: carX -= carX, carY -= carY;
+        case 32: carX = 0, carY = 0;
     }
     console.log("coords", carX, carY);
     var drawCar = function(x, y){
