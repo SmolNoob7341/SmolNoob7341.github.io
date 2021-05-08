@@ -1,52 +1,53 @@
-var Car = function() {
-    this.position = new PVector(width/2, height/2);
-    this.velocity = new PVector(0, 0);
-    this.acceleration = new PVector(0, 0);
-};
-
-Car.prototype.update = function() {
-    this.velocity.add(this.acceleration);
-    this.velocity.limit(10);
-    if(this.velocity.x < 0){
-        this.velocity.x = 0;
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Canvas</title>
+</head>
+<body>
+<canvas id="canvas" width="630" height="430"></canvas>
+ <script>
+ window.addEventListener('keydown',this.check,false);
+ const context = canvas.getContext('2d');
+  var carX = 0;
+  var carY = 0; 
+  function check(e) {
+    var code = e.keyCode;
+    switch (code) {
+        case 37: carX -= 10; break; //Left key
+        case 38: carY -= 10; break; //Up key
+        case 39: carX += 10; break; //Right key
+        case 40: carY += 10; break; //Down key
+        case 32: carX -= carX, carY -= carY;
     }
-    this.position.add(this.velocity);
-};
+    console.log("coords", carX, carY);
+    var drawCar = function(x, y){
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    ctx.fillRect(30+x, 0+y, 70, 10); 
+    ctx.fillRect(20+x, 10+y, 10, 10); 
+    ctx.fillRect(10+x, 20+y, 10, 30); 
+    ctx.fillRect(20+x, 50+y, 20, 10); 
+    ctx.fillRect(40+x, 40+y, 10, 10);
+    ctx.fillRect(40+x, 60+y, 10, 10); 
+    ctx.fillRect(50+x, 50+y, 50, 10); 
+    ctx.fillRect(100+x, 40+y, 10, 10); 
+    ctx.fillRect(100+x, 60+y, 10, 10); 
+    ctx.fillRect(110+x, 50+y, 40, 10);
+    ctx.fillRect(150+x, 30+y, 10, 20);
+    ctx.fillRect(110+x, 20+y, 40, 10); 
+    ctx.fillRect(100+x, 10+y, 10, 10); 
+    ctx.fillRect(30+x, 0+y, 10, 10);
+  }
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      drawCar(carX, carY);
+    //carRight(530, 380);
+}
 
-Car.prototype.display = function() {
-    stroke(0);
-    strokeWeight(2);
-    fill(255, 0, 0);
-    rect(this.position.x-52, this.position.y-59, 60, 60);
-    rect(this.position.x-74, this.position.y-30, 100, 31);
-    fill(92, 92, 92);
-    ellipse(this.position.x, this.position.y, 30, 26);
-    ellipse(this.position.x-50, this.position.y, 30, 30);
-};
+//ctx.fillRect(left-right, 0, 10, 10); 
+//ctx.fillRect(0, top-down, 10, 10); 
+//ctx.fillRect(0, 0, left-rightsize, 10); 
+//ctx.fillRect(0, 0, 10, top-down size); 
+</script>
+</body>
+</html>
 
-Car.prototype.checkEdges = function() {
-    if (this.position.x > width) {
-        this.position.x = 0;
-    } 
-    else if (this.position.x < 0) {
-        this.position.x = width;
-    }
-};
-
-var car = new Car();
-
-draw = function() {
-    if(keyIsPressed && keyCode === RIGHT){
-        car.acceleration.set(0.05, 0);
-    }
-    else if(keyIsPressed && keyCode === LEFT){
-        car.acceleration.set(-0.05, 0);
-    }
-    else{
-        car.acceleration.set(-0, 0);
-    }
-    background(255, 255, 255);
-    car.update();
-    car.checkEdges();
-    car.display(); 
-};
