@@ -35,10 +35,7 @@
           , "is joining");
         var peer = new Peer(); 
         var conn = peer.connect(document.getElementById('lname').value);
-        conn.on('open', function(){
-          conn.send('hi!');
-          console.log("debuging");
-        });
+        conn.send('hi!');
     };    
     joiningButton.addEventListener("click", isJoining);
 
