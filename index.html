@@ -17,9 +17,9 @@
     var isHosting= function() {
         console.log(document.getElementById('lname').value
         , "is hosting");
-
         var peer = new Peer(document.getElementById('lname').value); 
         peer.on('connection', function(conn) {
+          console.log("haha");
           conn.on('data', function(data){
             // Will print 'hi!'
             console.log(data);
@@ -37,6 +37,7 @@
         var conn = peer.connect(document.getElementById('lname').value);
         conn.on('open', function(){
           conn.send('hi!');
+          console.log("debuging");
         });
     };    
     joiningButton.addEventListener("click", isJoining);
@@ -70,8 +71,22 @@
     function check(e) {
       var code = e.keyCode;
       switch (code) {
-          case 39: speedX += 1; break;
-          case 37: speedX -= 1; break;
+          case 39: 
+            if(speedX > 0){
+              speedX = +speedX; 
+            }
+            else{
+              speedX += 1; 
+            }
+            break;
+          case 37: 
+            if(speedX < 0){
+              speedX = -speedX; 
+            }
+            else{
+              speedX -= 1; 
+            }
+            break;
           case 40: speedY += 1; break;
           case 38: speedY -= 1; break;
           case 32: carX = 0, carY = 0;
