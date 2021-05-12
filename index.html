@@ -34,7 +34,7 @@
     var isJoining = function() {
         console.log(document.getElementById('lname').value
           , "is joining");
-
+        console.log("huha");
         var peer = new Peer(); 
         var conn = peer.connect(document.getElementById('lname').value);
         conn.on('open', function(){
