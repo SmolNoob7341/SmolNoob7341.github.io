@@ -72,22 +72,8 @@
     function check(e) {
       var code = e.keyCode;
       switch (code) {
-          case 39: 
-            if(speedX > 0){
-              speedX = +speedX; 
-            }
-            else{
-              speedX += 1; 
-            }
-            break;
-          case 37: 
-            if(speedX < 0){
-              speedX = -speedX; 
-            }
-            else{
-              speedX -= 1; 
-            }
-            break;
+          case 39: speedX += 1; break;
+          case 37: speedX -= 1; break;
           case 40: speedY += 1; break;
           case 38: speedY -= 1; break;
           case 32: carX = 0, carY = 0;
