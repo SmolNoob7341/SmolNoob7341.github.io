@@ -37,12 +37,12 @@ var isJoining = function () {
     var peer = new Peer();
     peer.on("open", function(){
       var conn = peer.connect(document.getElementById('lname').value);conn.on('open', function(){
-                        conn.send("hi");
+          conn.send(dosument.getElementById('message').value);
       })
     });
 
     var conn = peer.connect(document.getElementById('lname').value);
-    conn.send('hi!');
+    conn.send(dosument.getElementById('message').value);
 };
 joiningButton.addEventListener("click", isJoining);
 
