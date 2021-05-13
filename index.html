@@ -7,11 +7,13 @@
         </head>
 
         <body>
-            <input type="text" id="lname" name="lname">
+            <input type="text" id="lname" name="lname"><br>
                 <button id="hosting">HOST</button>
                 <button id="joining">JOIN</button>
 
-                <canvas id="canvas" width="700" height="500"></canvas>
+                <canvas id="canvas" width="700" height="450"></canvas>
+                <input type="text" id="message" name="message">
+                <button id="messages">SEND</button>
                 <script>
                     var hostingButton = document.getElementById("hosting");
 var isHosting = function () {
@@ -30,12 +32,12 @@ hostingButton.addEventListener("click", isHosting);
 
 var joiningButton = document.getElementById("joining");
 var isJoining = function () {
-                        console.log(document.getElementById('lname').value, "is joining");
+    console.log(document.getElementById('lname').value, "is joining");
 
     var peer = new Peer();
     peer.on("open", function(){
       var conn = peer.connect(document.getElementById('lname').value);conn.on('open', function(){
-                        conn.send("HIII");
+                        conn.send("hi");
       })
     });
 
@@ -43,6 +45,26 @@ var isJoining = function () {
     conn.send('hi!');
 };
 joiningButton.addEventListener("click", isJoining);
+
+
+var chattingButton = document.getElementById("messages");
+var chatting = function () {
+    console.log(document.getElementById('message').value);
+
+    var peer = new Peer();
+    peer.on("open", function(){
+      var conn = peer.connect(document.getElementById('message').value);conn.on('open', function(){
+          conn.send(document.getElementById('message').value
+);
+      })
+    });
+
+    var conn = peer.connect(document.getElementById('message').value);
+    conn.send(document.getElementById('message').value);
+};
+chattingButton.addEventListener("click", chatting);
+
+
 
 
 window.addEventListener('keydown', this.check, false);
