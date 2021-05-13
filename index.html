@@ -48,17 +48,15 @@ joiningButton.addEventListener("click", isJoining);
 
 
 var chattingButton = document.getElementById("messages");
-var chatting = function () {
+var chatting = function () {  
     console.log(document.getElementById('message').value);
 
     var peer = new Peer();
     peer.on("open", function(){
       var conn = peer.connect(document.getElementById('message').value);conn.on('open', function(){
-          conn.send(document.getElementById('message').value
-);
+          conn.send(document.getElementById('message').value);
       })
     });
-
     var conn = peer.connect(document.getElementById('message').value);
     conn.send(document.getElementById('message').value);
 };
@@ -143,7 +141,8 @@ function everySecond() {
 //ctx.fillRect(left-right, 0, 10, 10);
 //ctx.fillRect(0, top-down, 10, 10);
 //ctx.fillRect(0, 0, left-rightsize, 10);
-//ctx.fillRect(0, 0, 10, top-down size);     </script>
+//ctx.fillRect(0, 0, 10, top-down size);     
+</script>
 </body>
 
 </html>
