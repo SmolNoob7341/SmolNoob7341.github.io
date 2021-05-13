@@ -1,13 +1,15 @@
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 var hostingButton = document.getElementById("hosting");
+var myConn = null;
+
 var isHosting = function () {
                         console.log(document.getElementById('lname').value, "is hosting");
     var peer = new Peer(document.getElementById('lname').value);
     peer.on('connection', function (conn) {
         conn.on('data', function (data) {
                         // Will print 'hi!'
-                        console.log(data);
+        ctx.fillText(document.getElementById('message').value, 500, 25);   
         });
     });
 };
@@ -21,12 +23,9 @@ var isJoining = function () {
     var peer = new Peer();
     peer.on("open", function(){
       var conn = peer.connect(document.getElementById('lname').value);conn.on('open', function(){
-          conn.send(document.getElementById('message').value);
+          myConn = conn;
       })
     });
-
-    var conn = peer.connect(document.getElementById('lname').value);
-    conn.send(document.getElementById('message').value);
 };
 joiningButton.addEventListener("click", isJoining);
 
@@ -34,23 +33,17 @@ joiningButton.addEventListener("click", isJoining);
 var chattingButton = document.getElementById("messages");
 var chatting = function () {  
     console.log(document.getElementById('message').value);
+    myConn.send(document.getElementById('message').value);;
+      
 
-    var peer = new Peer();
-    peer.on("open", function(){
-      var conn = peer.connect(document.getElementById('message').value);conn.on('open', function(){
-          conn.send(document.getElementById('message').value);
-      })
-    });
-    var conn = peer.connect(document.getElementById('message').value);
-    conn.send(document.getElementById('message').value);
-    
-    ctx.fillText(document.getElementById('message').value, 10, 50);
+    ctx.font = "20px Arial";
+    ctx.fillText(document.getElementById('message').value, 500, 25);
 };
 chattingButton.addEventListener("click", chatting);
 
 
 
-window.addEventListener('keydown', this.check, false);
+/*window.addEventListener('keydown', this.check, false);
 window.setInterval(this.everySecond, 1);
 const context = canvas.getContext('2d');
 var carX = 0;
@@ -127,3 +120,4 @@ function everySecond() {
 //ctx.fillRect(0, top-down, 10, 10);
 //ctx.fillRect(0, 0, left-rightsize, 10);
 //ctx.fillRect(0, 0, 10, top-down size);   
+*/
