@@ -1,9 +1,10 @@
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
 var hostingButton = document.getElementById("hosting");
 var isHosting = function () {
                         console.log(document.getElementById('lname').value, "is hosting");
     var peer = new Peer(document.getElementById('lname').value);
     peer.on('connection', function (conn) {
-                        console.log("haha");
         conn.on('data', function (data) {
                         // Will print 'hi!'
                         console.log(data);
@@ -45,7 +46,7 @@ var chatting = function () {
 };
 chattingButton.addEventListener("click", chatting);
 
-
+ctx.fillText(document.getElementById('message').value,10 ,50);
 
 
 window.addEventListener('keydown', this.check, false);
@@ -56,7 +57,7 @@ var carY = 0;
 var speedX = 0;
 var speedY = 0;
 var drawCar = function (x, y) {
-    var canvas = document.getElementById("canvas");
+    var canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d");
     ctx.fillRect(30 + x, 0 + y, 70, 10);
     ctx.fillRect(20 + x, 10 + y, 10, 10);
@@ -90,7 +91,7 @@ function check(e) {
             }
             else {
                         speedX -= 1;
-            }x
+            }
             break;
         case 40:
         if (speedY < 0) {
