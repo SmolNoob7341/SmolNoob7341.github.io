@@ -43,10 +43,11 @@ var chatting = function () {
     });
     var conn = peer.connect(document.getElementById('message').value);
     conn.send(document.getElementById('message').value);
+    
+    ctx.fillText(document.getElementById('message').value, 10, 50);
 };
 chattingButton.addEventListener("click", chatting);
 
-ctx.fillText(document.getElementById('message').value,10 ,50);
 
 
 window.addEventListener('keydown', this.check, false);
