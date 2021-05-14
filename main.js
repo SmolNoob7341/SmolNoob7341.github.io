@@ -3,12 +3,16 @@ var ctx = canvas.getContext("2d");
 var hostingButton = document.getElementById("hosting");
 var myConn = null;
 
+var text = 15;
+
 var isHosting = function () {
     console.log(document.getElementById('lname').value, "is hosting");
     var peer = new Peer(document.getElementById('lname').value);
     peer.on('connection', function (conn) {
         conn.on('data', function (data) {
-            // Will print 'hi!'
+          text += 20;
+          ctx.fillText(document.getElementById('message').value, 300, text);
+          
         });
     });
 };
@@ -28,18 +32,14 @@ var isJoining = function () {
 };
 joiningButton.addEventListener("click", isJoining);
 
-
 var chattingButton = document.getElementById("messages");
 var chatting = function () {
     myConn.send(document.getElementById('message').value);;
     ctx.font = "20px Arial";
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    var text = 15;
-    ctx.fillText(document.getElementById('message').value, 250, text);
-    text += 10;
+    ctx.fillText(document.getElementById('message').value, 5, text);
+    text += 20;
 };
 chattingButton.addEventListener("click", chatting);
-
 
 
 /*window.addEventListener('keydown', this.check, false);
