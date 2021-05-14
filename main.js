@@ -4,12 +4,11 @@ var hostingButton = document.getElementById("hosting");
 var myConn = null;
 
 var isHosting = function () {
-                        console.log(document.getElementById('lname').value, "is hosting");
+    console.log(document.getElementById('lname').value, "is hosting");
     var peer = new Peer(document.getElementById('lname').value);
     peer.on('connection', function (conn) {
         conn.on('data', function (data) {
-                        // Will print 'hi!'
-        ctx.fillText(document.getElementById('message').value, 500, 25);   
+            // Will print 'hi!'
         });
     });
 };
@@ -21,23 +20,23 @@ var isJoining = function () {
     console.log(document.getElementById('lname').value, "is joining");
 
     var peer = new Peer();
-    peer.on("open", function(){
-      var conn = peer.connect(document.getElementById('lname').value);conn.on('open', function(){
-          myConn = conn;
-      })
+    peer.on("open", function () {
+        var conn = peer.connect(document.getElementById('lname').value); conn.on('open', function () {
+            myConn = conn;
+        })
     });
 };
 joiningButton.addEventListener("click", isJoining);
 
 
 var chattingButton = document.getElementById("messages");
-var chatting = function () {  
-    console.log(document.getElementById('message').value);
+var chatting = function () {
     myConn.send(document.getElementById('message').value);;
-      
-
     ctx.font = "20px Arial";
-    ctx.fillText(document.getElementById('message').value, 500, 25);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var text = 15;
+    ctx.fillText(document.getElementById('message').value, 250, text);
+    text += 10;
 };
 chattingButton.addEventListener("click", chatting);
 
@@ -119,5 +118,5 @@ function everySecond() {
 //ctx.fillRect(left-right, 0, 10, 10);
 //ctx.fillRect(0, top-down, 10, 10);
 //ctx.fillRect(0, 0, left-rightsize, 10);
-//ctx.fillRect(0, 0, 10, top-down size);   
+//ctx.fillRect(0, 0, 10, top-down size);
 */
