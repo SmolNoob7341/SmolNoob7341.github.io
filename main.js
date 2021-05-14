@@ -12,7 +12,6 @@ var isHosting = function () {
         myConn = conn;
         conn.on('data', function (data) {
           text += 20; 
-          myConn.send(document.getElementById('message').value);
           ctx.font = "20px Arial";
           ctx.fillText(data, 300, text);
           
