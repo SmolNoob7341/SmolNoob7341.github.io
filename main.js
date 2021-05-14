@@ -9,9 +9,11 @@ var isHosting = function () {
     console.log(document.getElementById('lname').value, "is hosting");
     var peer = new Peer(document.getElementById('lname').value);
     peer.on('connection', function (conn) {
+        myConn = conn;
         conn.on('data', function (data) {
           text += 20;
-          ctx.fillText(document.getElementById('message').value, 300, text);
+          ctx.font = "20px Arial";
+          ctx.fillText(data, 300, text);
           
         });
     });
@@ -34,7 +36,7 @@ joiningButton.addEventListener("click", isJoining);
 
 var chattingButton = document.getElementById("messages");
 var chatting = function () {
-    myConn.send(document.getElementById('message').value);;
+    myConn.send(document.getElementById('message').value);
     ctx.font = "20px Arial";
     ctx.fillText(document.getElementById('message').value, 5, text);
     text += 20;
