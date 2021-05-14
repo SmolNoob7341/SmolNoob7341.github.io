@@ -11,7 +11,7 @@ var isHosting = function () {
     peer.on('connection', function (conn) {
         myConn = conn;
         conn.on('data', function (data) {
-          text += 20;
+          text += 20; 
           ctx.font = "20px Arial";
           ctx.fillText(data, 300, text);
           
