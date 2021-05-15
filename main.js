@@ -49,6 +49,7 @@ var chatting = function () {
   ctx.font = "20px Arial";
   ctx.fillStyle = "#0000ff";
   ctx.fillText(document.getElementById('message').value, 5, text);
+  document.getElementById('message').value = '';
   text += 20;
 };
 
