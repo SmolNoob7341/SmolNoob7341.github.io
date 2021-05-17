@@ -15,6 +15,7 @@ var isHosting = function () {
     myConn = conn;
     conn.on('data', function (data) {
       ctx.font = "20px Arial";
+      ctx.fillText(document.getElementById("username"), 5, 15);
       ctx.fillStyle = "#808080";
       text += 20;
       ctx.fillText(data, 300, text);
@@ -34,6 +35,7 @@ var isJoining = function () {
       myConn = conn;
       myConn.on('data', function (data) {
         ctx.font = "20px Arial";
+        ctx.fillText(document.getElementById("username"), 5, 15);
         ctx.fillStyle = "#808080";
         text += 20;
         ctx.fillText(data, 300, text);
@@ -47,6 +49,7 @@ var chattingButton = document.getElementById("messages");
 var chatting = function () {
   myConn.send(document.getElementById('message').value);
   ctx.font = "20px Arial";
+  ctx.fillText(document.getElementById("username"), 5, 15);
   ctx.fillStyle = "#0000ff";
   text += 20;
   ctx.fillText(document.getElementById('message').value, 5, text);
