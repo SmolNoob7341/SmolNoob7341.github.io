@@ -16,8 +16,8 @@ var isHosting = function () {
     conn.on('data', function (data) {
       ctx.font = "20px Arial";
       ctx.fillStyle = "#808080";
-      ctx.fillText(data, 300, text);
       text += 20;
+      ctx.fillText(data, 300, text);
     });
   });
 };
@@ -35,8 +35,8 @@ var isJoining = function () {
       myConn.on('data', function (data) {
         ctx.font = "20px Arial";
         ctx.fillStyle = "#808080";
-        ctx.fillText(data, 300, text);
         text += 20;
+        ctx.fillText(data, 300, text);
       })
     })
   });
@@ -48,9 +48,9 @@ var chatting = function () {
   myConn.send(document.getElementById('message').value);
   ctx.font = "20px Arial";
   ctx.fillStyle = "#0000ff";
+  text += 20;
   ctx.fillText(document.getElementById('message').value, 5, text);
   document.getElementById('message').value = '';
-  text += 20;
 };
 
 
