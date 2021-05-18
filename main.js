@@ -65,3 +65,4 @@ input.addEventListener("keyup", function (event) {
 });
 
 chattingButton.addEventListener("click", chatting);
+

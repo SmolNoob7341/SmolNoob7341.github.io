@@ -9,3 +9,12 @@
 		canvas {
 			background-color: rgb(255, 255, 255);
 		}
+  .myDiv {
+      width: 150px;
+      height: 50px;
+			text-align: center;
+      position: relative;
+      left: 50px;
+      up: 100px;
+      border: 3px solid #73AD21;
+      }
