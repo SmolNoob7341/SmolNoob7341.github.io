@@ -66,3 +66,14 @@ input.addEventListener("keyup", function (event) {
 
 chattingButton.addEventListener("click", chatting);
 
+var iDiv = document.createElement('div');
+iDiv.id = 'block';
+iDiv.className = 'block';
+document.getElementsByTagName('body')[0].appendChild(iDiv);
+
+// Now create and append to iDiv
+var innerDiv = document.createElement('div');
+innerDiv.className = 'block-2';
+
+// The variable iDiv is still good... Just append to it.
+iDiv.appendChild(innerDiv);
