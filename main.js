@@ -1,9 +1,6 @@
-var canvas = document.getElementById("myCanvas");
-var ctx = canvas.getContext("2d");
 var hostingButton = document.getElementById("hosting");
 var myConn = null;
 
-var text = 15;
 
 document.getElementById("messages").disabled = true;
 
@@ -13,11 +10,12 @@ var isHosting = function () {
   peer.on('connection', function (conn) {
     document.getElementById("messages").disabled = false;
     myConn = conn;
-    conn.on('data', function (data) {
-      ctx.font = "20px Arial";
-      ctx.fillStyle = "#808080";
-      ctx.fillText(data, 300, text);
-      text += 20;
+      myConn.on('data', function (data) {
+        var iDiv = document.createElement('div');
+        iDiv.id = 'block';
+        iDiv.className = 'messageIn';
+        iDiv.innerHTML = data;
+        document.getElementById('border').appendChild(iDiv);
     });
   });
 };
@@ -33,10 +31,11 @@ var isJoining = function () {
       document.getElementById("messages").disabled = false;
       myConn = conn;
       myConn.on('data', function (data) {
-        ctx.font = "20px Arial";
-        ctx.fillStyle = "#808080";
-        ctx.fillText(data, 300, text);
-        text += 20;
+        var iDiv = document.createElement('div');
+        iDiv.id = 'block';
+        iDiv.className = 'messageIn';
+        iDiv.innerHTML = data;
+        document.getElementById('border').appendChild(iDiv);
       })
     })
   });
@@ -46,12 +45,20 @@ joiningButton.addEventListener("click", isJoining);
 var chattingButton = document.getElementById("messages");
 var chatting = function () {
   myConn.send(document.getElementById('message').value);
-  ctx.font = "20px Arial";
-  ctx.fillStyle = "#0000ff";
-  ctx.fillText(document.getElementById('message').value, 5, text);
+  if(document.getElementById('message').value == "Hi"){
+    var iDiv = document.createElement('div');
+    iDiv.id = 'block';
+    iDiv.className = 'YOU';
+    iDiv.innerHTML = "You";
+    document.getElementById('border').appendChild(iDiv);
+    document.getElementById('message').value = '';
+  }
+  var iDiv = document.createElement('div');
+  iDiv.id = 'block';
+  iDiv.className = 'messageOut';
+  iDiv.innerHTML = document.getElementById('message').value;
+  document.getElementById('border').appendChild(iDiv);
   document.getElementById('message').value = '';
-    text += 20;
-
 };
 
 
@@ -66,14 +73,3 @@ input.addEventListener("keyup", function (event) {
 
 chattingButton.addEventListener("click", chatting);
 
-var iDiv = document.createElement('div');
-iDiv.id = 'block';
-iDiv.className = 'block';
-document.getElementsByTagName('body')[0].appendChild(iDiv);
-
-// Now create and append to iDiv
-var innerDiv = document.createElement('div');
-innerDiv.className = 'block-2';
-
-// The variable iDiv is still good... Just append to it.
-iDiv.appendChild(innerDiv);
