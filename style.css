@@ -20,6 +20,10 @@ html, body {
   height: 70%;
   overflow: auto;
 }
-#YOU{
-  font-size: 0.5px;
+.me {
+  font-size: 10px
+}
+.him {
+  text-align: right;
+  font-size: 10px
 }
