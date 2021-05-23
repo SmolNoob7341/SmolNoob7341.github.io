@@ -1,3 +1,10 @@
+var addDivToBorder = function (className, text){
+   var iDiv = document.createElement('div');
+        iDiv.id = 'block';
+        iDiv.className = className;
+        iDiv.innerHTML = text;
+        document.getElementById('border').appendChild(iDiv);
+}
 var hostingButton = document.getElementById("hosting");
 var myConn = null;
 
@@ -11,18 +18,11 @@ var isHosting = function () {
     document.getElementById("messages").disabled = false;
     myConn = conn;
     myConn.on('data', function (data) {
-      if (previousMessageAuthor == "me" || previousMessageAuthor == "") {
-        var iDiv = document.createElement('div');
-        iDiv.id = 'block';
-        iDiv.className = 'him';
-        iDiv.innerHTML = "HIM";
-        document.getElementById('border').appendChild(iDiv);
-      }
-      var iDiv = document.createElement('div');
-      iDiv.id = 'block';
-      iDiv.className = 'messageIn';
-      iDiv.innerHTML = data;
-      document.getElementById('border').appendChild(iDiv);        previousMessageAuthor = "him";
+        if (previousMessageAuthor != "him") {
+          addDivToBorder("him", "HIM");
+        }
+        addDivToBorder("messageIn", data);
+        previousMessageAuthor = "him";
     });
   });
 };
@@ -37,19 +37,13 @@ var isJoining = function () {
       document.getElementById("messages").disabled = false;
       myConn = conn;
       myConn.on('data', function (data) {
-        if (previousMessageAuthor == "me" || previousMessageAuthor == "") {
-          var iDiv = document.createElement('div');
-          iDiv.id = 'block';
-          iDiv.className = 'him';
-          iDiv.innerHTML = "HIM";
-          document.getElementById('border').appendChild(iDiv);
+       if (previousMessageAuthor != "him") {
+          addDivToBorder("him", "HIM");
         }
-        var iDiv = document.createElement('div');
-        iDiv.id = 'block';
-        iDiv.className = 'messageIn';
-        iDiv.innerHTML = data;
-        document.getElementById('border').appendChild(iDiv);
+        addDivToBorder("messageIn", data);
         previousMessageAuthor = "him";
+
+
       })
     })
   });
@@ -58,8 +52,7 @@ joiningButton.addEventListener("click", isJoining);
 
 var chattingButton = document.getElementById("messages");
 var chatting = function () {
-   previousMessageAuthor
-  if (previousMessageAuthor == "him" || previousMessageAuthor == "") {
+  if (previousMessageAuthor != "me"){
     var iDiv = document.createElement('div');
     iDiv.id = 'block';
     iDiv.className = 'me';
