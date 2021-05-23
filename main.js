@@ -12,7 +12,6 @@ var channelInput = document.getElementById('lname');
 var myConn = null;
 
 sendButton.disabled = true;
-
 var previousMessageAuthor = "";
 var isHosting = function () {
   console.log(channelInput.value, "is hosting");
@@ -20,12 +19,24 @@ var isHosting = function () {
   peer.on('connection', function (conn) {
     sendButton.disabled = false;
     myConn = conn;
+    myConn.send({ "type": "setUsername", "username": "fromHostinConnor" });
+
+    myConn.on('open', function(){
+      consoloe.log("ALERT");
+      myConn.send({ "type": "setUsername", "username": "fromHostinConnor" });
+    })
+
     myConn.on('data', function (data) {
-      if (previousMessageAuthor != "him") {
-        addDivToBorder("him", "HIM");
+      console.log(data);
+      if (data.type == "sendMessage") {
+        if (previousMessageAuthor != "him") {
+          addDivToBorder("him", "HIM");
+        }
+        addDivToBorder("messageIn", data.message);
+        previousMessageAuthor = "him";
+      } else if (data.type == "setUsername") {
+        console.log("Hi", data.username);
       }
-      addDivToBorder("messageIn", data);
-      previousMessageAuthor = "him";
     });
   });
 };
@@ -36,17 +47,18 @@ var isJoining = function () {
   console.log(channelInput, "is joining");
   var peer = new Peer();
   peer.on("open", function () {
-    var conn = peer.connect(channelInput.value); conn.on('open', function () {
+    var conn = peer.connect(channelInput.value);
+    conn.on('open', function () {
       sendButton.disabled = false;
       myConn = conn;
+
+      myConn.send({ "type": "setUsername", "username": "fromJoiningConnon" });
       myConn.on('data', function (data) {
         if (previousMessageAuthor != "him") {
           addDivToBorder("him", "HIM");
         }
         addDivToBorder("messageIn", data);
         previousMessageAuthor = "him";
-
-
       })
     })
   });
@@ -57,7 +69,7 @@ var chatting = function () {
   if (previousMessageAuthor != "me") {
     addDivToBorder("me", "ME");
   }
-  myConn.send(msgInput.value);
+  myConn.send({ "type": "sendMessage", "message": msgInput.value });
   addDivToBorder("messageOut", msgInput.value);
   msgInput.value = '';
   previousMessageAuthor = "me";
