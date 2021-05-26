@@ -5,6 +5,7 @@ var addDivToBorder = function (className, text) {
   iDiv.innerHTML = text;
   document.getElementById('border').appendChild(iDiv);
 }
+var peerUsername = "Him";
 var msgInput = document.getElementById("message");
 var sendButton = document.getElementById("messages");
 var hostingButton = document.getElementById("hosting");
@@ -21,21 +22,23 @@ var isHosting = function () {
     myConn = conn;
     myConn.send({ "type": "setUsername", "username": "fromHostinConnor" });
 
-    myConn.on('open', function(){
+    myConn.on('open', function () {
       consoloe.log("ALERT");
       myConn.send({ "type": "setUsername", "username": "fromHostinConnor" });
     })
 
     myConn.on('data', function (data) {
+
       console.log(data);
       if (data.type == "sendMessage") {
         if (previousMessageAuthor != "him") {
-          addDivToBorder("him", "HIM");
+          addDivToBorder("him", peerUsername);
         }
         addDivToBorder("messageIn", data.message);
         previousMessageAuthor = "him";
       } else if (data.type == "setUsername") {
         console.log("Hi", data.username);
+        peerUsername = data.username;
       }
     });
   });
@@ -44,7 +47,7 @@ hostingButton.addEventListener("click", isHosting);
 
 var joiningButton = document.getElementById("joining");
 var isJoining = function () {
-  console.log(channelInput, "is joining");
+  console.log(channelInput.value, "is joining");
   var peer = new Peer();
   peer.on("open", function () {
     var conn = peer.connect(channelInput.value);
@@ -52,13 +55,19 @@ var isJoining = function () {
       sendButton.disabled = false;
       myConn = conn;
 
-      myConn.send({ "type": "setUsername", "username": "fromJoiningConnon" });
+      myConn.send({ "type": "setUsername", "username": username.value });
+
       myConn.on('data', function (data) {
-        if (previousMessageAuthor != "him") {
-          addDivToBorder("him", "HIM");
+        if (data.type == "sendMessage") {
+          if (previousMessageAuthor != "him") {
+            addDivToBorder("him", peerUsername);
+          }
+          addDivToBorder("messageIn", data.message);
+          previousMessageAuthor = "him";
+        } else if (data.type == "setUsername") {
+          console.log("Hi", data.username);
+          peerUsername = data.username;
         }
-        addDivToBorder("messageIn", data);
-        previousMessageAuthor = "him";
       })
     })
   });
@@ -67,7 +76,7 @@ joiningButton.addEventListener("click", isJoining);
 
 var chatting = function () {
   if (previousMessageAuthor != "me") {
-    addDivToBorder("me", "ME");
+    addDivToBorder("me", username.value);
   }
   myConn.send({ "type": "sendMessage", "message": msgInput.value });
   addDivToBorder("messageOut", msgInput.value);
