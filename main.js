@@ -27,20 +27,16 @@ var myConn = null;
 
 sendButton.disabled = true;
 var previousMessageAuthor = "";
+
 var isHosting = function () {
   console.log(channelInput.value, "is hosting");
   var peer = new Peer(channelInput.value);
   peer.on('connection', function (conn) {
     sendButton.disabled = false;
     myConn = conn;
-    myConn.send({ "type": "setUsername", "username": username.value });
-
     myConn.on('open', function () {
       myConn.send({ "type": "setUsername", "username": username.value });
     })
-
-    myConn.send({ "type": "setUsername", "username": username.value });
-
     handleMessage();
 
   });
@@ -56,11 +52,8 @@ var isJoining = function () {
     conn.on('open', function () {
       sendButton.disabled = false;
       myConn = conn;
-
       myConn.send({ "type": "setUsername", "username": username.value });
-
       handleMessage();
-
     })
   });
 };
@@ -76,7 +69,6 @@ var chatting = function () {
   previousMessageAuthor = "me";
 };
 
-
 msgInput.addEventListener("keyup", function (event) {
   if (event.keyCode === 13) {
     event.preventDefault();
@@ -84,4 +76,3 @@ msgInput.addEventListener("keyup", function (event) {
   }
 })
 sendButton.addEventListener("click", chatting);
-
