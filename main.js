@@ -1,3 +1,16 @@
+var handleMessage = function () {
+  myConn.on('data', function (data) {
+    if (data.type == "sendMessage") {
+      if (previousMessageAuthor != "him") {
+        addDivToBorder("him", peerUsername);
+      }
+      addDivToBorder("messageIn", data.message);
+      previousMessageAuthor = "him";
+    } else if (data.type == "setUsername") {
+      peerUsername = data.username;
+    }
+  })
+}
 var addDivToBorder = function (className, text) {
   var iDiv = document.createElement('div');
   iDiv.id = 'block';
@@ -28,18 +41,8 @@ var isHosting = function () {
 
     myConn.send({ "type": "setUsername", "username": username.value });
 
-    myConn.on('data', function (data) {
+    handleMessage();
 
-      if (data.type == "sendMessage") {
-        if (previousMessageAuthor != "him") {
-          addDivToBorder("him", peerUsername);
-        }
-        addDivToBorder("messageIn", data.message);
-        previousMessageAuthor = "him";
-      } else if (data.type == "setUsername") {
-        peerUsername = data.username;
-      }
-    });
   });
 };
 hostingButton.addEventListener("click", isHosting);
@@ -54,20 +57,10 @@ var isJoining = function () {
       sendButton.disabled = false;
       myConn = conn;
 
-      myConn.send({ "type": "setUsername", "username": username.value});
+      myConn.send({ "type": "setUsername", "username": username.value });
 
-      myConn.on('data', function (data) {
-        
-        if (data.type == "sendMessage") {
-          if (previousMessageAuthor != "him") {
-            addDivToBorder("him", peerUsername);
-          }
-          addDivToBorder("messageIn", data.message);
-          previousMessageAuthor = "him";
-        } else if (data.type == "setUsername") {
-          peerUsername = data.username;
-        }
-      })
+      handleMessage();
+
     })
   });
 };
