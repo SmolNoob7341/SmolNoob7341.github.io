@@ -21,13 +21,13 @@ var addDivToBorder = function (className, text) {
 var peerUsername = "Him";
 var msgInput = document.getElementById("message");
 var sendButton = document.getElementById("messages");
-var hostingButton = document.getElementById("hosting");
 var channelInput = document.getElementById('lname');
 var myConn = null;
 
 sendButton.disabled = true;
 var previousMessageAuthor = "";
 
+var hostingButton = document.getElementById("hosting");
 var isHosting = function () {
   console.log(channelInput.value, "is hosting");
   var peer = new Peer(channelInput.value);
@@ -59,15 +59,16 @@ var isJoining = function () {
 };
 joiningButton.addEventListener("click", isJoining);
 
-var chatting = function () {
-  if (previousMessageAuthor != "me") {
+var sending = function(){
+  if(previousMessageAuthor != "me"){
     addDivToBorder("me", username.value);
   }
-  myConn.send({ "type": "sendMessage", "message": msgInput.value });
+  myConn.send({'type': 'sendMessage', 'message': msgInput.value});
   addDivToBorder("messageOut", msgInput.value);
   msgInput.value = '';
   previousMessageAuthor = "me";
-};
+}
+
 
 msgInput.addEventListener("keyup", function (event) {
   if (event.keyCode === 13) {
@@ -75,4 +76,11 @@ msgInput.addEventListener("keyup", function (event) {
     document.getElementById("messages").click();
   }
 })
-sendButton.addEventListener("click", chatting);
+sendButton.addEventListener("click", sending);
+
+function updateScroll(){
+    var element = document.getElementById("border");
+    element.scrollTop = element.scrollHeight;
+}
+setInterval(updateScroll,1);
+
