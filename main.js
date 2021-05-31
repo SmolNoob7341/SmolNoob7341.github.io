@@ -36,7 +36,7 @@ var isHosting = function () {
     myConn = conn;
     myConn.on('open', function () {
       myConn.send({ "type": "setUsername", "username": username.value });
-    })
+    }) 
     handleMessage();
 
   });
@@ -49,9 +49,9 @@ var isJoining = function () {
   var peer = new Peer();
   peer.on("open", function () {
     var conn = peer.connect(channelInput.value);
-    conn.on('open', function () {
-      sendButton.disabled = false;
-      myConn = conn;
+    sendButton.disabled = false;
+    myConn = conn;
+    myConn.on('open', function () {
       myConn.send({ "type": "setUsername", "username": username.value });
       handleMessage();
     })
