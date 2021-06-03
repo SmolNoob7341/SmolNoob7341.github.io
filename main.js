@@ -1,23 +1,36 @@
 var handleMessage = function () {
   myConn.on('data', function (data) {
-    if (data.type == "sendMessage") {
-      if (previousMessageAuthor != "him") {
-        addDivToBorder("him", peerUsername);
+    if(data.type == 'sendMessage'){
+      if(previousMessageAuthor != 'him'){
+        addDivToBorder('him', peerUsername, '');
+        previousMessageAuthor = 'him';
       }
-      addDivToBorder("messageIn", data.message);
-      previousMessageAuthor = "him";
-    } else if (data.type == "setUsername") {
+      addDivToBorder('messageIn', data.message, lastId); 
+      lastId += 1;
+    }else if(data.type == 'setUsername'){
       peerUsername = data.username;
+    }else if(data.type == 'updateMessage'){
+      document.getElementById(data.msgId).innerHTML = data.text;
     }
   })
 }
-var addDivToBorder = function (className, text) {
+var lastId = 0;
+var editingId = -1;
+var addDivToBorder = function (className, text, id) {
   var iDiv = document.createElement('div');
-  iDiv.id = 'block';
+  iDiv.id = id;
   iDiv.className = className;
   iDiv.innerHTML = text;
+  var tmpLastId = lastId;
+  iDiv.addEventListener("click", function() {
+    editingId = tmpLastId;
+    document.getElementById("message").placeholder = "Editing text";
+    document.getElementById('messages').innerHTML = 'EDIT';
+  });
   document.getElementById('border').appendChild(iDiv);
 }
+
+
 var peerUsername = "Him";
 var msgInput = document.getElementById("message");
 var sendButton = document.getElementById("messages");
@@ -59,14 +72,25 @@ var isJoining = function () {
 };
 joiningButton.addEventListener("click", isJoining);
 
-var sending = function(){
-  if(previousMessageAuthor != "me"){
-    addDivToBorder("me", username.value);
+var isSending = function(){
+  document.getElementById("message").placeholder = "Enter text";
+  document.getElementById('messages').innerHTML = 'SEND';
+  if(editingId < 0){
+    if(previousMessageAuthor != "me"){
+      addDivToBorder("me", username.value, '');
+    }
+    myConn.send({'type': 'sendMessage', 'message': msgInput.value});
+    addDivToBorder("messageOut", msgInput.value, lastId);
+    lastId += 1;
+    msgInput.value = '';
+    previousMessageAuthor = "me";
+  }else{
+    myConn.send({'type': 'updateMessage', 'text': msgInput.value, 'msgId': editingId});
+    document.getElementById(editingId).innerHTML = msgInput.value;
+    msgInput.value = '';
+    editingId = -1;
+    document.getElementById(username).innerHTML = '';
   }
-  myConn.send({'type': 'sendMessage', 'message': msgInput.value});
-  addDivToBorder("messageOut", msgInput.value);
-  msgInput.value = '';
-  previousMessageAuthor = "me";
 }
 
 
@@ -76,7 +100,7 @@ msgInput.addEventListener("keyup", function (event) {
     document.getElementById("messages").click();
   }
 })
-sendButton.addEventListener("click", sending);
+sendButton.addEventListener("click", isSending);
 
 function updateScroll(){
     var element = document.getElementById("border");
