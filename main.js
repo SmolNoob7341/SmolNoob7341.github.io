@@ -1,4 +1,4 @@
-var handleMessage = function () {
+var handleMessage = function () { 
   myConn.on('data', function (data) {
     if(data.type == 'sendMessage'){
       if(previousMessageAuthor != 'him'){
@@ -22,17 +22,17 @@ var addDivToBorder = function (className, text, id) {
   iDiv.className = className;
   iDiv.innerHTML = text;
   var tmpLastId = lastId;
-  if(className != 'me'){
-  iDiv.addEventListener("click", function() {
-    editingId = tmpLastId;
-    document.getElementById("message").placeholder = "Editing text";
-    document.getElementById('messages').innerHTML = 'EDIT';
-    document.getElementById(editingId).style.color = "red";
-    iDiv.addEventListener("dblclick", function() {
-      document.getElementById(editingId).style.color = "blue";
+  if(className == 'messageOut') {
+    iDiv.addEventListener("click", function() {
+      editingId = tmpLastId;
+      document.getElementById("message").placeholder = "Editing text";
+      document.getElementById('messages').innerHTML = 'EDIT';
+      document.getElementById(editingId).style.color = "red";
+      iDiv.addEventListener("dblclick", function() {
+        document.getElementById(editingId).style.color = "blue";
     })
   });
-  }
+}
   document.getElementById('border').appendChild(iDiv);
 }
 
@@ -105,11 +105,11 @@ sendButton.addEventListener("click", isSending);
 
 msgInput.addEventListener("keyup", function (event) {
   if (event.keyCode === 13) {
+    if(editingId != -1){
+      document.getElementById(editingId).style.color = "blue";
+    }
     event.preventDefault();
     document.getElementById("messages").click();
-  }
-  if(editingId != -1){
-    document.getElementById(editingId).style.color = "blue";
   }
 })
 function updateScroll(){
