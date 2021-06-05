@@ -22,14 +22,19 @@ var addDivToBorder = function (className, text, id) {
   iDiv.className = className;
   iDiv.innerHTML = text;
   var tmpLastId = lastId;
+  if(className != 'me'){
   iDiv.addEventListener("click", function() {
     editingId = tmpLastId;
     document.getElementById("message").placeholder = "Editing text";
     document.getElementById('messages').innerHTML = 'EDIT';
+    document.getElementById(editingId).style.color = "red";
+    iDiv.addEventListener("dblclick", function() {
+      document.getElementById(editingId).style.color = "blue";
+    })
   });
+  }
   document.getElementById('border').appendChild(iDiv);
 }
-
 
 var peerUsername = "Him";
 var msgInput = document.getElementById("message");
@@ -86,22 +91,27 @@ var isSending = function(){
     previousMessageAuthor = "me";
   }else{
     myConn.send({'type': 'updateMessage', 'text': msgInput.value, 'msgId': editingId});
-    document.getElementById(editingId).innerHTML = msgInput.value;
+    document.getElementById(editingId).
+    innerHTML = msgInput.value;
+    if(msgInput.value == ''){
+      document.getElementById(editingId).style.fontFamily = "cursive";
+      document.getElementById(editingId).innerHTML = 'Deleted Message';
+    }
     msgInput.value = '';
     editingId = -1;
-    document.getElementById(username).innerHTML = '';
   }
 }
-
+sendButton.addEventListener("click", isSending);
 
 msgInput.addEventListener("keyup", function (event) {
   if (event.keyCode === 13) {
     event.preventDefault();
     document.getElementById("messages").click();
   }
+  if(editingId != -1){
+    document.getElementById(editingId).style.color = "blue";
+  }
 })
-sendButton.addEventListener("click", isSending);
-
 function updateScroll(){
     var element = document.getElementById("border");
     element.scrollTop = element.scrollHeight;

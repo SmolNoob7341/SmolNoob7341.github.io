@@ -23,3 +23,7 @@ html, body{
  text-align: right;
  font-size: 10px;
 }
+
+.highlight {
+  color: red;
+}
