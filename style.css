@@ -1,25 +1,24 @@
-html, body{
-  height: 100%;
-}  
-.messageOut{
-  color: blue;
-}
-.messageIn{ 
-  color: grey; 
-  text-align: right;
-}
- 
-#border {
-  background: white;
-  height: 70%;
-  overflow: auto;
+.basic-grid {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  height: 100vh;
+  width: 100vw;
+	overflow: auto;
+
 }
 
-.me {
- font-size: 10px;
+*{
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
- 
-.him {
- text-align: right;
- font-size: 10px;
+
+#container {
+	overflow: hidden;
+}
+#explorer {
+  color: blue;
+}
+.fileEntry:hover {
+  background-color: silver;
 }

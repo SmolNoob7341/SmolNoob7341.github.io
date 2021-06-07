@@ -2,24 +2,27 @@
 <html>
 
 <head>
-	<title>Canvas</title>
-	<script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.js">
+  <link rel="stylesheet" type="text/css" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<script src="https://unpkg.com/@isomorphic-git/lightning-fs">
 
 	</script>
-	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="https://unpkg.com/isomorphic-git@beta">
+
+	</script>
+  	<script src="https://unpkg.com/monaco-editor@latest/min/vs/loader.js">
+	</script>
+	<script type="module" src="main.js"></script>
+
 </head>
 
 <body>
-	<input type = "text" id = "username" placeholder = "Enter username"><br>
-  <input type = "text" id = "lname" placeholder = "Channel name"><br>
-  <button id = "hosting">HOST</button>
-  <button id = "joining">JOIN</button>
-  <div id = "border"></div>
-  <span style="background-color: #FFFF00"></span>
-  <input type = "text" id = "message" placeholder = "Enter text">
-  <button id = "messages">SEND</button>
-  <script src = "main.js"></script>
+  <section class="basic-grid">
+    <div id="explorer"></div>
 
+    <div id="container"></div>
+  </section>
 </body>
 
 </html>
