@@ -130,12 +130,10 @@ setInterval(updateScroll,100);
 
 
 var myFocus = function (){
-  usernameIsTyping = username.value+' is typing...';
-  myConn.send({'type': 'isTyping', 'message': usernameIsTyping});
+  myConn.send({'type': 'isTyping'});
 }
 var notFocus = function (){
-    myConn.send({'type': 'isntTyping', 'message': ''})
-    document.getElementById('span').innerHTML = '';
+    myConn.send({'type': 'isntTyping'})
 }
 msgInput.addEventListener("keypress", myFocus);
 sendButton.addEventListener("click", notFocus);
