@@ -1,24 +1,34 @@
-.basic-grid {
-  display: grid;
-  grid-template-columns: 1fr 4fr;
-  height: 100vh;
-  width: 100vw;
-	overflow: auto;
-
-}
-
-*{
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-#container {
-	overflow: hidden;
-}
-#explorer {
+html, body{
+  height: 100%;
+}  
+.messageOut{
   color: blue;
 }
-.fileEntry:hover {
-  background-color: silver;
+.messageIn{ 
+  color: grey; 
+  text-align: right;
+}
+ 
+#border {
+  background: white;
+  height: 70%;
+  overflow: auto;
+}
+
+.me {
+ font-size: 10px;
+}
+ 
+.him {
+ text-align: right;
+ font-size: 10px;
+}
+.isTyping{
+  font-size: 10px;
+}
+#span{
+  font-size: 10px;
+  position: relative;
+  top: 70%;
+  left: -105px;
 }
