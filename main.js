@@ -1,3 +1,8 @@
+u = new URL(window.location.href)
+document.getElementById('lname').value = u.searchParams.get('channel');
+
+
+
 var handleMessage = function () { 
   myConn.on('data', function (data) {
 
@@ -62,13 +67,18 @@ var isHosting = function () {
   peer.on('connection', function (conn) {
     sendButton.disabled = false;
     msgInput.disabled = false;
-    document.getElementById('status').style.color = 'yellow';
+    document.getElementById('status').style.color = 'green';
     myConn = conn;
     myConn.on('open', function () {
       myConn.send({ "type": "setUsername", "username": username.value });
       document.getElementById('status').style.color = 'green';
+      myConn.on('close', function (conn) {
+        sendButton.disabled = true;
+        msgInput.disabled = true;
+        document.getElementById('status').style.color = 'red';
+      });
     }) 
-    handleMessage();
+    handleMessage();2
 
   });
 };
@@ -83,16 +93,22 @@ var isJoining = function () {
     var conn = peer.connect(channelInput.value);
     sendButton.disabled = false;
     msgInput.disabled = false;
-    document.getElementById('status').style.color = 'yellow';
+    document.getElementById('status').style.color = 'green';
     myConn = conn;
     myConn.on('open', function () {
       myConn.send({ "type": "setUsername", "username": username.value });
       handleMessage();
       document.getElementById('status').style.color = 'green';
+      myConn.on('close', function (conn) {
+        sendButton.disabled = true;
+        msgInput.disabled = true;
+        document.getElementById('status').style.color = 'red';
+      });
     })
   });
 };
 joiningButton.addEventListener("click", isJoining);
+
 var isSending = function(){
   document.getElementById("message").placeholder = "Enter text";
   document.getElementById('messages').innerHTML = 'SEND';
