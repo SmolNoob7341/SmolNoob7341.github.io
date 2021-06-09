@@ -56,15 +56,17 @@ var previousMessageAuthor = "";
 
 var hostingButton = document.getElementById("hosting");
 var isHosting = function () {
+  document.getElementById('status').style.color = "orange";
   console.log(channelInput.value, "is hosting");
   var peer = new Peer(channelInput.value);
   peer.on('connection', function (conn) {
     sendButton.disabled = false;
     msgInput.disabled = false;
-    document.getElementById('status').style.color = 'green';
+    document.getElementById('status').style.color = 'yellow';
     myConn = conn;
     myConn.on('open', function () {
       myConn.send({ "type": "setUsername", "username": username.value });
+      document.getElementById('status').style.color = 'green';
     }) 
     handleMessage();
 
@@ -74,17 +76,19 @@ hostingButton.addEventListener("click", isHosting);
 
 var joiningButton = document.getElementById("joining");
 var isJoining = function () {
+  document.getElementById('status').style.color = "orange";
   console.log(channelInput.value, "is joining");
   var peer = new Peer();
   peer.on("open", function () {
     var conn = peer.connect(channelInput.value);
     sendButton.disabled = false;
     msgInput.disabled = false;
-    document.getElementById('status').style.color = 'green';
+    document.getElementById('status').style.color = 'yellow';
     myConn = conn;
     myConn.on('open', function () {
       myConn.send({ "type": "setUsername", "username": username.value });
       handleMessage();
+      document.getElementById('status').style.color = 'green';
     })
   });
 };
