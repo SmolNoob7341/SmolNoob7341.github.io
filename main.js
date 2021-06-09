@@ -47,6 +47,7 @@ var peerUsername = "Him";
 var msgInput = document.getElementById("message");
 var sendButton = document.getElementById("messages");
 var channelInput = document.getElementById('lname');
+
 var myConn = null;
 
 sendButton.disabled = true;
@@ -60,6 +61,7 @@ var isHosting = function () {
   peer.on('connection', function (conn) {
     sendButton.disabled = false;
     msgInput.disabled = false;
+    document.getElementById('status').style.color = 'green';
     myConn = conn;
     myConn.on('open', function () {
       myConn.send({ "type": "setUsername", "username": username.value });
@@ -78,6 +80,7 @@ var isJoining = function () {
     var conn = peer.connect(channelInput.value);
     sendButton.disabled = false;
     msgInput.disabled = false;
+    document.getElementById('status').style.color = 'green';
     myConn = conn;
     myConn.on('open', function () {
       myConn.send({ "type": "setUsername", "username": username.value });
@@ -86,7 +89,6 @@ var isJoining = function () {
   });
 };
 joiningButton.addEventListener("click", isJoining);
-
 var isSending = function(){
   document.getElementById("message").placeholder = "Enter text";
   document.getElementById('messages').innerHTML = 'SEND';

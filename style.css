@@ -32,3 +32,10 @@ html, body{
   top: 70%;
   left: -105px;
 }
+p {
+  font-size: 100px;
+  color: red;
+  position: absolute;
+  top: -135px;
+  left: 610px;
+}
