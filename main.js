@@ -1,11 +1,7 @@
 u = new URL(window.location.href)
 document.getElementById('lname').value = u.searchParams.get('channel');
-
-
-
 var handleMessage = function () { 
   myConn.on('data', function (data) {
-
     if(data.type == 'sendMessage'){
       if(previousMessageAuthor != 'him'){
         addDivToBorder('him', peerUsername, '');
@@ -15,6 +11,7 @@ var handleMessage = function () {
       lastId += 1;
     }else if(data.type == 'setUsername'){
       peerUsername = data.username;
+      addUserToBorder(peerUsername);
     }else if(data.type == 'updateMessage'){
       document.getElementById(data.msgId).innerHTML = data.text;
     }else if(data.type == 'isTyping'){
@@ -27,6 +24,7 @@ var handleMessage = function () {
 }
 var lastId = 0;
 var editingId = -1;
+
 var addDivToBorder = function (className, text, id) {
   var iDiv = document.createElement('div');
   iDiv.id = id;
@@ -46,6 +44,13 @@ var addDivToBorder = function (className, text, id) {
   });
 }
   document.getElementById('border').appendChild(iDiv);
+}
+var addUserToBorder = function (userId) {
+  var iDiv = document.createElement('div');
+  iDiv.id = 'allUsers';
+  iDiv.className = 'allUsers';
+  iDiv.innerHTML = userId;
+  document.getElementById('users').appendChild(iDiv);
 }
 
 var peerUsername = "Him";
@@ -78,7 +83,7 @@ var isHosting = function () {
         document.getElementById('status').style.color = 'red';
       });
     }) 
-    handleMessage();2
+    handleMessage();
 
   });
 };

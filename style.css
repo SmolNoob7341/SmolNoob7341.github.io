@@ -11,8 +11,19 @@ html, body{
  
 #border {
   background: white;
-  height: 70%;
+  height: 350px;
+  width: 70%;
   overflow: auto;
+}
+
+#container {
+  gap: 10px;
+  display: flex;
+}
+
+#users {
+  width: 30%;
+  background: grey;
 }
 
 .me {
@@ -36,6 +47,6 @@ p {
   font-size: 100px;
   color: red;
   position: absolute;
-  top: -135px;
-  left: 90%;
+  top: -33%;
+  left: 609px;
 }
