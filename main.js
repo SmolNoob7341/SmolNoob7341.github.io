@@ -1,17 +1,31 @@
 u = new URL(window.location.href)
 document.getElementById('lname').value = u.searchParams.get('channel');
-var handleMessage = function () { 
-  myConn.on('data', function (data) {
+var peerUsername = username.value;
+var msgInput = document.getElementById("message");
+var sendButton = document.getElementById("messages");
+var channelInput = document.getElementById('lname');
+var myConns = [];
+var host = false;
+
+var handleMessage = function (conn) { 
+  conn.on('data', function (data) {
     if(data.type == 'sendMessage'){
-      if(previousMessageAuthor != 'him'){
-        addDivToBorder('him', peerUsername, '');
-        previousMessageAuthor = 'him';
+      if(host == true){
+        for(var i = 0; i < myConns.length; i++){
+          if(myConns[i].connectionId != conn.connectionId){
+            myConns[i].send({'type': 'sendMessage', 'message': data.message, 'username': data.username});
+          }
+        }
+      }
+      if(previousMessageAuthor != data.username){
+        addDivToBorder('him', data.username, '');
+        previousMessageAuthor = data.username;
       }
       addDivToBorder('messageIn', data.message, lastId); 
       lastId += 1;
     }else if(data.type == 'setUsername'){
       peerUsername = data.username;
-      addUserToBorder(peerUsername);
+      updateUsername(conn.connectionId, peerUsername);
     }else if(data.type == 'updateMessage'){
       document.getElementById(data.msgId).innerHTML = data.text;
     }else if(data.type == 'isTyping'){
@@ -39,26 +53,24 @@ var addDivToBorder = function (className, text, id) {
       editingId = tmpLastId;
       document.getElementById("message").placeholder = "Editing text";
       document.getElementById('messages').innerHTML = 'EDIT';
-      document.getElementById(editingId).style.color = "red";
+      document.getElementById(editingId).style.color = "red";   
       msgInput.value = document.getElementById(editingId).innerHTML;
   });
 }
   document.getElementById('border').appendChild(iDiv);
 }
-var addUserToBorder = function (userId) {
+var addUserName = function (connectionId) {
   var iDiv = document.createElement('div');
-  iDiv.id = 'allUsers';
-  iDiv.className = 'allUsers';
-  iDiv.innerHTML = userId;
+  iDiv.id = connectionId;
+  iDiv.innerHTML = connectionId;
   document.getElementById('users').appendChild(iDiv);
 }
-
-var peerUsername = "Him";
-var msgInput = document.getElementById("message");
-var sendButton = document.getElementById("messages");
-var channelInput = document.getElementById('lname');
-
-var myConn = null;
+var deleteUser = function(connectionId){
+  document.getElementById(connectionId).remove();
+}
+var updateUsername = function (connectionId, username) {
+  document.getElementById(connectionId).innerHTML = username;
+}
 
 sendButton.disabled = true;
 msgInput.disabled = true;
@@ -66,24 +78,30 @@ var previousMessageAuthor = "";
 
 var hostingButton = document.getElementById("hosting");
 var isHosting = function () {
+  document.getElementById('joining').disabled = true;
   document.getElementById('status').style.color = "orange";
   console.log(channelInput.value, "is hosting");
+
   var peer = new Peer(channelInput.value);
   peer.on('connection', function (conn) {
+    addUserName(conn.connectionId);
+    host = true;
     sendButton.disabled = false;
     msgInput.disabled = false;
     document.getElementById('status').style.color = 'green';
-    myConn = conn;
-    myConn.on('open', function () {
-      myConn.send({ "type": "setUsername", "username": username.value });
+    myConns.push(conn);
+    conn.on('open', function () {
+      conn.send({ "type": "setUsername", "username": username.value });
       document.getElementById('status').style.color = 'green';
-      myConn.on('close', function (conn) {
+      let myId = conn.connectionId;
+      conn.on('close', function () {
+        deleteUser(myId);
         sendButton.disabled = true;
         msgInput.disabled = true;
         document.getElementById('status').style.color = 'red';
       });
     }) 
-    handleMessage();
+    handleMessage(conn);
 
   });
 };
@@ -92,19 +110,22 @@ hostingButton.addEventListener("click", isHosting);
 var joiningButton = document.getElementById("joining");
 var isJoining = function () {
   document.getElementById('status').style.color = "orange";
+  document.getElementById('hosting').disabled = true;
   console.log(channelInput.value, "is joining");
   var peer = new Peer();
   peer.on("open", function () {
     var conn = peer.connect(channelInput.value);
+    addUserName(conn.connectionId);
     sendButton.disabled = false;
     msgInput.disabled = false;
     document.getElementById('status').style.color = 'green';
-    myConn = conn;
-    myConn.on('open', function () {
-      myConn.send({ "type": "setUsername", "username": username.value });
-      handleMessage();
+    myConns.push(conn);
+    conn.on('open', function () {
+      conn.send({ "type": "setUsername", "username": username.value });
+      handleMessage(conn);
       document.getElementById('status').style.color = 'green';
-      myConn.on('close', function (conn) {
+      conn.on('close', function () {
+        deleteUser(conn.connectionId);
         sendButton.disabled = true;
         msgInput.disabled = true;
         document.getElementById('status').style.color = 'red';
@@ -120,14 +141,21 @@ var isSending = function(){
   if(editingId < 0){
     if(previousMessageAuthor != "me"){
       addDivToBorder("me", username.value, '');
+      previousMessageAuthor = 'me';
     }
-    myConn.send({'type': 'sendMessage', 'message': msgInput.value});
+    for(var i = 0; i < myConns.length; i++){
+      myConns[i].send({'type': 'sendMessage', 'message': msgInput.value, 'username': username.value});
+    }
     addDivToBorder("messageOut", msgInput.value, lastId);
     lastId += 1;
     msgInput.value = '';
-    previousMessageAuthor = "me";
+    var today = new Date();
+    var date = today.getHours()+':'+today.getMinutes();
+    document.getElementById('time').innerHTML = date;
   }else{
-    myConn.send({'type': 'updateMessage', 'text': msgInput.value, 'msgId': editingId});
+    for(var k = 0; k < myConns.length; k++){
+      myConns[k].send({'type': 'updateMessage', 'text': msgInput.value, 'msgId': editingId});
+    }
     document.getElementById(editingId).
     innerHTML = msgInput.value;
     if(msgInput.value == ''){
@@ -157,10 +185,14 @@ setInterval(updateScroll,100);
 
 
 var myFocus = function (){
-  myConn.send({'type': 'isTyping'});
+  for(var i = 0; i < myConns.length; i++){
+    myConns[i].send({'type': 'isTyping'});
+  }
 }
 var notFocus = function (){
-    myConn.send({'type': 'isntTyping'})
+  for(var i = 0; i < myConns.length; i++){
+    myConns[i].send({'type': 'isntTyping'})
+  }
 }
 msgInput.addEventListener("keypress", myFocus);
 sendButton.addEventListener("click", notFocus);

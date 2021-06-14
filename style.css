@@ -24,6 +24,7 @@ html, body{
 #users {
   width: 30%;
   background: grey;
+  margin-left: 10px;
 }
 
 .me {
@@ -37,16 +38,23 @@ html, body{
 .isTyping{
   font-size: 10px;
 }
+
 #span{
   font-size: 10px;
   position: relative;
   top: 70%;
   left: -105px;
 }
+#time{
+  font-size: 10px;
+  position: relative;
+  top: 60%;
+  left: 400
+}
 p {
   font-size: 100px;
   color: red;
   position: absolute;
-  top: -33%;
-  left: 609px;
+  top: -28%;
+  left: 91%;
 }
