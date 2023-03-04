@@ -1,199 +1,227 @@
-u = new URL(window.location.href)
-document.getElementById('lname').value = u.searchParams.get('channel');
-var peerUsername = username.value;
-var msgInput = document.getElementById("message");
-var sendButton = document.getElementById("messages");
-var channelInput = document.getElementById('lname');
-var myConns = [];
-var host = false;
+var db = new Dexie('myDatabase');
+db.version(1).stores({
+  myTable: '++id, data',
+});
 
-var handleMessage = function (conn) { 
-  conn.on('data', function (data) {
-    if(data.type == 'sendMessage'){
-      if(host == true){
-        for(var i = 0; i < myConns.length; i++){
-          if(myConns[i].connectionId != conn.connectionId){
-            myConns[i].send({'type': 'sendMessage', 'message': data.message, 'username': data.username});
+// Variables
+var codeEditor = document.querySelector("#codeEditor");
+var runButton = document.querySelector('#run');
+var addButton = document.querySelector('#addtestcase');
+var slider = document.getElementById('timelapseSlider');
+var clearButton = document.getElementById('clearHistory');
+var codeHistory = [];
+var editor;
+
+// Functions
+function initializeEditor() {
+  editor = CodeMirror.fromTextArea(codeEditor, {
+    mode: "javascript",
+    lineNumbers: true
+  });
+}
+
+function run() {
+  var code = editor.getValue();
+  try {
+    var runCode = new Function("input", "console", code);
+    var result = "";
+    var console = {
+      log: function () {
+        for (let i = 0; i < arguments.length; i++) {
+          result += arguments[i];
+          if (i != arguments.length - 1) {
+            result += ' ';
           }
         }
       }
-      if(previousMessageAuthor != data.username){
-        addDivToBorder('him', data.username, '');
-        previousMessageAuthor = data.username;
+    };
+    var inputContainers = document.getElementsByClassName("input-container");
+    var outputContainers = document.getElementsByClassName("output-container");
+    var expectedContainers = document.getElementsByClassName("expected-container");
+
+    for (var i = 0; i < inputContainers.length; i++) {
+      var inputValue = inputContainers[i].getElementsByTagName("textarea")[0].value;
+      var temp = expectedContainers[i].getElementsByTagName("textarea")[0];
+      var all = document.getElementsByClassName("all-container")[i];
+
+      result = "";
+      runCode(inputValue, console);
+      var outputTextarea = outputContainers[i].getElementsByTagName("textarea")[0];
+      outputTextarea.value = result;
+      if (result.trim() == temp.value.trim()) {
+        all.classList.remove('bg-danger');
+        all.classList.add('bg-success');
+      } else {
+        all.classList.remove('bg-success');
+        all.classList.add('bg-danger');
       }
-      addDivToBorder('messageIn', data.message, lastId); 
-      lastId += 1;
-    }else if(data.type == 'setUsername'){
-      peerUsername = data.username;
-      updateUsername(conn.connectionId, peerUsername);
-    }else if(data.type == 'updateMessage'){
-      document.getElementById(data.msgId).innerHTML = data.text;
-    }else if(data.type == 'isTyping'){
-      usernameIsTyping = peerUsername+' is typing...';
-      document.getElementById('span').innerHTML = usernameIsTyping;
-    }else if(data.type == 'isntTyping'){
-      document.getElementById('span').innerHTML = '';
     }
-  })
+    codeHistory.push(editor.getValue());
+    slider.setAttribute('max', codeHistory.length);
+    slider.value = codeHistory.length;
+  } catch (error) {
+    var outputContainers = document.getElementsByClassName("output-container");
+    for (var i = 0; i < outputContainers.length; i++) {
+      outputContainers[i].getElementsByTagName("textarea")[0].value = error.message;
+    }
+  }
 }
-var lastId = 0;
-var editingId = -1;
 
-var addDivToBorder = function (className, text, id) {
-  var iDiv = document.createElement('div');
-  iDiv.id = id;
-  iDiv.className = className;
-  iDiv.innerHTML = text;
-  var tmpLastId = lastId;
-  if(className == 'messageOut') {
-    iDiv.addEventListener("click", function() {
-      if(editingId != -1){
-       document.getElementById(editingId).style.color = 'blue';
-     }
-      editingId = tmpLastId;
-      document.getElementById("message").placeholder = "Editing text";
-      document.getElementById('messages').innerHTML = 'EDIT';
-      document.getElementById(editingId).style.color = "red";   
-      msgInput.value = document.getElementById(editingId).innerHTML;
+function addTestCase() {
+  var allContainer = document.createElement('div');
+  allContainer.classList.add("all-container");
+  var inputContainer = document.createElement("div");
+  inputContainer.classList.add("input-container", "position-relative", "p-2");
+  var outputContainer = document.createElement('div');
+  outputContainer.classList.add("output-container", "p-2");
+  var expectedContainer = document.createElement("div");
+  expectedContainer.classList.add("expected-container", "border-bottom", "border-5", "border-dark", "p-2");
+
+  var newInput = document.createElement("textarea");
+  newInput.classList.add("form-control");
+  newInput.placeholder = "Input Goes Here";
+
+  var newOutput = document.createElement("textarea");
+  newOutput.classList.add("form-control");
+  newOutput.placeholder = "Output Is Here";
+
+  var newExpected = document.createElement("textarea");
+  newExpected.classList.add("form-control");
+  newExpected.placeholder = "Put Expected Answer Here";
+
+  var newIcon = document.createElement("i");
+  newIcon.classList.add("newIcon", "position-absolute", "top-0", "end-0");
+  newIcon.innerHTML = "🗙";
+
+  inputContainer.appendChild(newInput);
+  inputContainer.appendChild(newIcon);
+  outputContainer.appendChild(newOutput);
+  expectedContainer.appendChild(newExpected);
+
+  allContainer.appendChild(inputContainer);
+  allContainer.appendChild(outputContainer);
+  allContainer.appendChild(expectedContainer);
+
+  newIcon.addEventListener("click", () => allContainer.remove());
+
+  var inputOutput = document.getElementById('inputOutput');
+
+  inputOutput.appendChild(allContainer);
+}
+
+function saveEditorState() {
+  var editorValue = editor.getValue();
+  localStorage.setItem('editorValue', editorValue);
+}
+
+function loadEditorState() {
+  var editorValue = localStorage.getItem('editorValue');
+  editor.setValue(editorValue);
+}
+
+function saveTestCases() {
+  const testCases = [...document.querySelectorAll('.all-container')].map(container => ({
+    input: container.querySelector('.input-container textarea').value,
+    output: container.querySelector('.output-container textarea').value,
+    expected: container.querySelector('.expected-container textarea').value,
+  }));
+
+  localStorage.setItem('testCases', JSON.stringify(testCases));
+}
+
+function loadTestCases() {
+  var testCases = JSON.parse(localStorage.getItem('testCases'));
+  for (var i = 0; i < testCases.length; i++) {
+    var testCase = testCases[i];
+
+    var allContainer = document.createElement('div');
+    allContainer.classList.add("all-container");
+    var inputContainer = document.createElement("div");
+    inputContainer.classList.add("input-container", "position-relative", "p-2");
+    var outputContainer = document.createElement('div');
+    outputContainer.classList.add("output-container", "p-2");
+    var expectedContainer = document.createElement("div");
+    expectedContainer.classList.add("expected-container", "border-bottom", "border-5", "border-dark", "p-2");
+
+    var newInput = document.createElement("textarea");
+    newInput.classList.add("form-control");
+    newInput.placeholder = "Input Goes Here";
+    newInput.value = testCase.input;
+
+    var newOutput = document.createElement("textarea");
+    newOutput.classList.add("form-control");
+    newOutput.placeholder = "Output Is Here";
+    newOutput.value = testCase.output;
+
+    var newExpected = document.createElement("textarea");
+    newExpected.classList.add("form-control");
+    newExpected.placeholder = "Put Expected Answer Here";
+    newExpected.value = testCase.expected;
+
+    var newIcon = document.createElement("i");
+    newIcon.classList.add("newIcon", "position-absolute", "top-0", "end-0");
+    newIcon.innerHTML = "🗙";
+
+    inputContainer.appendChild(newInput);
+    inputContainer.appendChild(newIcon);
+    outputContainer.appendChild(newOutput);
+    expectedContainer.appendChild(newExpected);
+
+    allContainer.appendChild(inputContainer);
+    allContainer.appendChild(outputContainer);
+    allContainer.appendChild(expectedContainer);
+
+    newIcon.addEventListener("click", () => allContainer.remove());
+
+    var inputOutput = document.getElementById('inputOutput');
+    inputOutput.appendChild(allContainer);
+  }
+}
+
+function setCodeVersion() {
+  editor.setValue(codeHistory[slider.value - 1]);
+  if (slider.value == codeHistory.length) {
+    editor.setOption("readOnly", false);
+  } else {
+    editor.setOption("readOnly", true);
+  }
+}
+
+function clearCodeHistory() {
+  codeHistory.length = 0;
+  slider.setAttribute('max', 0);
+}
+
+function saveCodeHistory() {
+  db.myTable.put({ data: codeHistory });
+  console.log(db.myTable);
+}
+
+function setSavedCodeHistory() {
+  db.myTable.toArray().then((result) => {
+    const retrievedArray = result;
+    codeHistory = retrievedArray;
+    runButton.innerHTML = result;
+    console.log(result);
   });
 }
-  document.getElementById('border').appendChild(iDiv);
-}
-var addUserName = function (connectionId) {
-  var iDiv = document.createElement('div');
-  iDiv.id = connectionId;
-  iDiv.innerHTML = connectionId;
-  document.getElementById('users').appendChild(iDiv);
-}
-var deleteUser = function(connectionId){
-  document.getElementById(connectionId).remove();
-}
-var updateUsername = function (connectionId, username) {
-  document.getElementById(connectionId).innerHTML = username;
-}
 
-sendButton.disabled = true;
-msgInput.disabled = true;
-var previousMessageAuthor = "";
+// Call the functions when buttons are pressed
+runButton.addEventListener('click', () => run());
+addButton.addEventListener('click', () => addTestCase());
 
-var hostingButton = document.getElementById("hosting");
-var isHosting = function () {
-  document.getElementById('joining').disabled = true;
-  document.getElementById('status').style.color = "orange";
-  console.log(channelInput.value, "is hosting");
+// Call the functions when the page loads/unloads
+window.addEventListener('load', initializeEditor);
+window.addEventListener('unload', saveEditorState);
+window.addEventListener('load', loadEditorState);
+window.addEventListener('unload', saveTestCases);
+window.addEventListener('load', loadTestCases);
 
-  var peer = new Peer(channelInput.value);
-  peer.on('connection', function (conn) {
-    addUserName(conn.connectionId);
-    host = true;
-    sendButton.disabled = false;
-    msgInput.disabled = false;
-    document.getElementById('status').style.color = 'green';
-    myConns.push(conn);
-    conn.on('open', function () {
-      conn.send({ "type": "setUsername", "username": username.value });
-      document.getElementById('status').style.color = 'green';
-      let myId = conn.connectionId;
-      conn.on('close', function () {
-        deleteUser(myId);
-        sendButton.disabled = true;
-        msgInput.disabled = true;
-        document.getElementById('status').style.color = 'red';
-      });
-    }) 
-    handleMessage(conn);
+// Time Lapse slider
+slider.addEventListener('input', setCodeVersion);
+runButton.addEventListener('click', saveCodeHistory);
+runButton.addEventListener('click', setSavedCodeHistory);
 
-  });
-};
-hostingButton.addEventListener("click", isHosting);
+// Clear code history
+clearButton.addEventListener('click', () => clearCodeHistory());
 
-var joiningButton = document.getElementById("joining");
-var isJoining = function () {
-  document.getElementById('status').style.color = "orange";
-  document.getElementById('hosting').disabled = true;
-  console.log(channelInput.value, "is joining");
-  var peer = new Peer();
-  peer.on("open", function () {
-    var conn = peer.connect(channelInput.value);
-    addUserName(conn.connectionId);
-    sendButton.disabled = false;
-    msgInput.disabled = false;
-    document.getElementById('status').style.color = 'green';
-    myConns.push(conn);
-    conn.on('open', function () {
-      conn.send({ "type": "setUsername", "username": username.value });
-      handleMessage(conn);
-      document.getElementById('status').style.color = 'green';
-      conn.on('close', function () {
-        deleteUser(conn.connectionId);
-        sendButton.disabled = true;
-        msgInput.disabled = true;
-        document.getElementById('status').style.color = 'red';
-      });
-    })
-  });
-};
-joiningButton.addEventListener("click", isJoining);
-
-var isSending = function(){
-  document.getElementById("message").placeholder = "Enter text";
-  document.getElementById('messages').innerHTML = 'SEND';
-  if(editingId < 0){
-    if(previousMessageAuthor != "me"){
-      addDivToBorder("me", username.value, '');
-      previousMessageAuthor = 'me';
-    }
-    for(var i = 0; i < myConns.length; i++){
-      myConns[i].send({'type': 'sendMessage', 'message': msgInput.value, 'username': username.value});
-    }
-    addDivToBorder("messageOut", msgInput.value, lastId);
-    lastId += 1;
-    msgInput.value = '';
-    var today = new Date();
-    var date = today.getHours()+':'+today.getMinutes();
-    document.getElementById('time').innerHTML = date;
-  }else{
-    for(var k = 0; k < myConns.length; k++){
-      myConns[k].send({'type': 'updateMessage', 'text': msgInput.value, 'msgId': editingId});
-    }
-    document.getElementById(editingId).
-    innerHTML = msgInput.value;
-    if(msgInput.value == ''){
-      document.getElementById(editingId).style.fontFamily = "cursive";
-      document.getElementById(editingId).innerHTML = 'Deleted Message';
-    }
-    msgInput.value = '';
-    editingId = -1;
-  }
-}
-sendButton.addEventListener("click", isSending);
-
-msgInput.addEventListener("keyup", function (event) {
-  if (event.keyCode === 13) {
-    if(editingId != -1){
-      document.getElementById(editingId).style.color = "blue";
-    }
-    event.preventDefault();
-    document.getElementById("messages").click();
-  }
-})
-function updateScroll(){
-    var element = document.getElementById("border");
-    element.scrollTop = element.scrollHeight;
-}
-setInterval(updateScroll,100);
-
-
-var myFocus = function (){
-  for(var i = 0; i < myConns.length; i++){
-    myConns[i].send({'type': 'isTyping'});
-  }
-}
-var notFocus = function (){
-  for(var i = 0; i < myConns.length; i++){
-    myConns[i].send({'type': 'isntTyping'})
-  }
-}
-msgInput.addEventListener("keypress", myFocus);
-sendButton.addEventListener("click", notFocus);
-msgInput.addEventListener("blur", notFocus);
