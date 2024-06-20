@@ -10,9 +10,9 @@ body {
 }
 
 
-.question {
-  font-size: 240px;
-    margin-top: 20px;
+#question {
+  font-size: 24px;
+  margin-top: 20px;
 }
 #game-area {
   position: relative;
