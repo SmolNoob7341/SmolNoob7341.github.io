@@ -1,4 +1,49 @@
-html {
-  height: 100%;
-  width: 100%;
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+}
+
+
+.question {
+  font-size: 240px;
+    margin-top: 20px;
+}
+#game-area {
+  position: relative;
+  width: 80%;
+  height: 60vh;
+  border: 2px solid #000;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.balloon {
+  position: absolute;
+  width: 50px;
+  height: 80px;
+  background-color: red;
+  border-radius: 50% 50% 0 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: white;
+}
+
+#score {
+  margin-top: 20px;
+  font-size: 24px;
+}
+
+#level-select button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 18px;
 }
