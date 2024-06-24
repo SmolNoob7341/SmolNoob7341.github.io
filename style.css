@@ -9,10 +9,19 @@ body {
   background-color: #f0f0f0;
 }
 
+h1 {
+  margin-bottom: 1px;
+  
+}
+#question {
+  margin: 10px;
+  font-size: 32px;
+}
+
 #game-area {
   position: relative;
-  width: 80%;
-  height: 70vh;
+  width: 90%;
+  height: 75vh;
   border: 2px solid #000;
   background-color: #fff;
   overflow: hidden;
@@ -45,13 +54,64 @@ body {
   background-color: black;
 }
 
-#score, #question{
-  margin-top: 20px;
-  font-size: 24px;
+#score {
+  margin-top: 10px;
+  font-size: 36px;
 }
 
-#level-select button {
+.difficulty-button {
   margin: 10px;
   padding: 10px 20px;
-  font-size: 18px;
+  font-size: 25px;
 }
+
+button {
+  cursor: pointer;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  padding: 15px 20px;
+  font-size: 20px;
+  margin: 10px;
+}
+
+#backButton {
+  position: fixed;
+  top: 20px;
+  right: 15px;
+}
+
+.settings-btn {
+  background-color: #929292; /* Green background */
+  border: none; /* Remove border */
+  color: white; /* White text */
+  padding: 10px 13px; /* Some padding */
+  text-align: center; /* Center the text (if any) */
+  text-decoration: none; /* Remove underline */
+  display: inline-block; /* Make the container inline-block */
+  font-size: 35px; /* Increase font size */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer/hand icon */
+  position: fixed;
+  top: 20px;
+  left: 15px;
+}
+
+.container {
+  text-align: center; /* Center align items */
+  white-space: nowrap; /* Prevent wrapping */
+}
+
+.labels {
+  display: inline-block;
+  margin: 5px 20vh; /* Adjust horizontal margin */
+  padding: 10px; /* Optional: Add padding for spacing */
+  box-sizing: border-box; /* Include padding and border in element's total width */
+  font-size: 30px; /* Reset font size */
+}
+
+
+
+

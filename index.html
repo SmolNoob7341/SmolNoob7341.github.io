@@ -5,17 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Balloon Popping Game</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <h1>Balloon Popping Game</h1>
-    <div id="question"></div>
+    <h1 id="gameTitle">Balloon Popping Game</h1>
+    <div id="question">Please Choose a Difficulty Level</div>
     <div id="game-area"></div>
     <div id="score">Score: 0</div>
     <div id="level-select">
-        <button onclick="startGame('easy')">Easy</button>
-        <button onclick="startGame('medium')">Medium</button>
-        <button onclick="startGame('hard')">Hard</button>
+        <button class="difficulty-button" onclick="startGame('easy')">Easy</button>
+        <button class="difficulty-button" onclick="startGame('medium')">Medium</button>
+        <button class="difficulty-button" onclick="startGame('hard')">Hard</button>
     </div>
+    <button id="settingsButton" class="settings-btn">
+      <i class="fas fa-cog"></i>
+    </button>
+    <div id="settingsScreen" class="container">
+        <div class="difficulty">
+            <h2>Easy</h2>
+            <label id='labels'>Speed:
+                <input type="range" min="1" max="10" value="2" class="slider" id="easy-speed">
+            </label>
+            <label>Balloons per Interval:
+                <input type="range" min="1" max="10" value="2" class="slider" id="easy-balloons">
+            </label>
+            <label>Interval Speed (seconds):
+                <input type="range" min="0" max="3" step="0.5" value="2" class="slider" id="easy-interval">
+            </label>
+        </div>
+
+        <div class="difficulty">
+            <h2 id='labels'>Medium</h2>
+            <label>Speed:
+                <input type="range" min="1" max="10" value="4" class="slider" id="medium-speed">
+            </label>
+            <label>Balloons per Interval:
+                <input type="range" min="1" max="10" value="4" class="slider" id="medium-balloons">
+            </label>
+            <label>Interval Speed (seconds):
+                <input type="range" min="0" max="3" step="0.1" value="1.5" class="slider" id="medium-interval">
+            </label>
+        </div>
+
+        <div class="difficulty">
+            <h2 id='labels'>Hard</h2>
+            <label>Speed:
+                <input type="range" min="1" max="10" value="6" class="slider" id="hard-speed">
+            </label>
+            <label>Balloons per Interval:
+                <input type="range" min="1" max="10" value="6" class="slider" id="hard-balloons">
+            </label>
+            <label>Interval Speed (seconds):
+                <input type="range" min="0" max="3" step="0.5" value="0.5" class="slider" id="hard-interval">
+            </label>
+        </div>
+
+        
+    </div>
+    <button id="backButton">Back to Home</button>
     <script src="script.js"></script>
 </body>
 </html>

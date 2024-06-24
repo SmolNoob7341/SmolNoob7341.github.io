@@ -1,9 +1,14 @@
 const gameArea = document.getElementById('game-area');
 const scoreDisplay = document.getElementById('score');
 const questionDisplay = document.getElementById('question');
-let BALLOONS_PER_INTERVAL; // Number of balloons to create at each interval
-let BALLOON_INTERVAL; // Interval between balloon creation (in milliseconds)
-//const MAX_BALLOONS = 20; // Maximum number of balloons on screen at once
+const gameTitle = document.getElementById('gameTitle');
+const backButton = document.getElementById('backButton');
+const levelButtonArea = document.getElementById("level-select");
+const settingsButton = document.getElementById('settingsButton');
+let settingsArea = document.getElementById('settingsScreen');
+let balloonsPerInterval; // Number of balloons to create at each interval
+let intervalSpeed; 
+let currentLevel;
 
 const USED_POSITIONS = new Set(); // Track used positions to avoid overlap
 
@@ -16,6 +21,16 @@ let balloons = [];
 let currentAnswerIndex = 0;
 let currentQuestionType;
 
+homeScreen();
+
+backButton.addEventListener('click', homeScreen);
+
+settingsButton.addEventListener('click', settingsScreen);
+
+document.querySelectorAll('.slider').forEach(slider => {
+    slider.addEventListener('input', updateSlider);
+});
+
 const words = [
     "CAT",
     "DOG",
@@ -27,6 +42,12 @@ const words = [
     "MOON",
     "STAR"
 ];
+
+let settingsConfig = {
+    easy: { speed: 2, balloonsPerInterval: 2, intervalSpeed: 2 },
+    medium: { speed: 4, balloonsPerInterval: 4, intervalSpeed: 1.5 },
+    hard: { speed: 6, balloonsPerInterval: 6, intervalSpeed: 0.5 }
+};
 
 function generateQuestion() {
     const questionType = ["number", "spelling"];
@@ -61,38 +82,36 @@ function spellingQuestion() {
 }
 
 function startGame(level) {
+    currentLevel = level;
     if(level == null){
         level = 'medium';
     }
     settings(level);
+    gameScreen();
+
     const question = generateQuestion();
     questionDisplay.textContent = question.question;
     correctAnswer = question.answer;
     currentQuestionType = question.type;
     currentAnswerIndex = 0;
     clearInterval(interval);
-    interval = setInterval(createBalloon, BALLOON_INTERVAL);
+    interval = setInterval(createBalloon, intervalSpeed);
 }
 
 function settings(level){
-    let ans = (level == 'easy' ? 2 : (level == 'medium' ? 3 : 4));
-    speed = ans;
-    BALLOONS_PER_INTERVAL = ans;
-    BALLOON_INTERVAL = (level == 'easy' ? 2 : (level == 'medium' ? 1.5 : 1)) * 1000;
-    //MAX_BALLOONS = 10 * ans;
+    const config = settingsConfig[level];
+    speed = config.speed;
+    balloonsPerInterval = config.balloonsPerInterval;
+    intervalSpeed = config.intervalSpeed * 1000;
 }
 
-function createBalloon() {
-    //if (balloons.length >= MAX_BALLOONS) return;
-    
-    for(let i = 0; i < BALLOONS_PER_INTERVAL; i++){
-        //if (balloons.length >= MAX_BALLOONS) break;
-        
+function createBalloon() {    
+    for(let i = 0; i < balloonsPerInterval; i++){        
         let position = getRandomPosition();
         
         const balloon = document.createElement('div');
         balloon.className = 'balloon';
-        balloon.style.left = `${Math.random() * (gameArea.clientWidth - 50)}px`;
+        balloon.style.left = `${position.left}px`;
         balloon.style.top = `${gameArea.clientHeight}px`;
         balloon.style.backgroundColor = getRandomColor();
     
@@ -105,8 +124,6 @@ function createBalloon() {
     
         balloon.textContent = char;
 
-        balloon.style.left = `${position.left}px`;
-        balloon.style.top = `${gameArea.clientHeight}px`;
         balloon.addEventListener('click', () => {
             if(currentQuestionType === "spelling"){
                 if (balloon.textContent === correctAnswer[currentAnswerIndex]) {
@@ -117,7 +134,7 @@ function createBalloon() {
                         scoreDisplay.textContent = `Score: ${score}`;
                         currentAnswerIndex = 0;
                         setTimeout(() => {
-                            startGame(); 
+                            startGame(currentLevel); 
                         }, 1000);
                     }
                 } else {
@@ -127,7 +144,7 @@ function createBalloon() {
                 if(balloon.textContent === correctAnswer){
                     score++;
                     popBalloon(balloon, true);
-                    startGame();
+                    startGame(currentLevel);
                 }else{
                     popBalloon(balloon, false);
                 }
@@ -142,10 +159,10 @@ function createBalloon() {
 }
 
 function moveBalloon(balloon) {
-    const balloonInterval = setInterval(() => {
+    const balInterval = setInterval(() => {
         let top = parseFloat(balloon.style.top);
         if (top <= -80) {
-            clearInterval(balloonInterval);
+            clearInterval(balInterval);
             removeBalloon(balloon);
         } else {
             balloon.style.top = `${top - speed}px`;
@@ -193,7 +210,7 @@ function getRandomChar(type) {
 function getFixedPositions() {
     const positions = [];
     const step = 60; // Distance between positions to avoid overlap
-    for (let left = 0; left < gameArea.clientWidth; left += step) {
+    for (let left = 0; left < gameArea.clientWidth - 50; left += step) {
         positions.push(left);
     }
     return positions;
@@ -220,4 +237,67 @@ function isOverlapping(position) {
         }
     }
     return false;
+}
+
+function gameScreen() {
+    gameTitle.style.display = "none";
+    gameArea.style.display = 'block';
+    scoreDisplay.style.display = 'block';
+    backButton.style.display = 'block';
+    levelButtonArea.style.display = 'none';
+    settingsButton.style.display = 'none';
+    settingsArea.style.display = 'none';
+
+}
+
+function homeScreen() {
+    gameTitle.style.display = "block";
+    gameArea.style.display = 'none';
+    scoreDisplay.style.display = 'none';
+    questionDisplay.textContent = 'Please Choose a Difficulty Level';
+    questionDisplay.style.display = 'block';
+    backButton.style.display = 'none';
+    levelButtonArea.style.display = 'block';
+    settingsButton.style.display = 'block';
+    settingsArea.style.display = 'none';
+
+    gameArea.innerHTML = '';
+    clearInterval(interval);
+}
+
+function settingsScreen() {
+    gameTitle.style.display = "none";
+    questionDisplay.style.display = 'none';
+    backButton.style.display = 'block';
+    settingsButton.style.display = 'none';
+    levelButtonArea.style.display = 'none';
+    settingsArea.style.display = 'block';
+    
+}
+
+function updateSlider(event) {
+    const value = parseFloat(event.target.value); // Parse value to float if needed
+    const id = event.target.id;
+    // Determine difficulty level and setting type (speed, balloons, interval)
+    let difficulty, settingType;
+    if (id.startsWith('easy')) {
+        difficulty = 'easy';
+    } else if (id.startsWith('medium')) {
+        difficulty = 'medium';
+    } else if (id.startsWith('hard')) {
+        difficulty = 'hard';
+    }
+
+    if (id.includes('speed')) {
+        settingType = 'speed';
+    } else if (id.includes('balloons')) {
+        settingType = 'balloonsPerInterval';
+    } else if (id.includes('interval')) {
+        settingType = 'intervalSpeed';
+    }
+
+    // Update settingsconfig with the new value
+    if (difficulty && settingType) {
+        settingsConfig[difficulty][settingType] = value;
+    }
 }
