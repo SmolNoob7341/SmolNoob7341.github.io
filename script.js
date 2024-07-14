@@ -1,4 +1,5 @@
 const gameArea = document.getElementById('game-area');
+
 const scoreDisplay = document.getElementById('score');
 const questionDisplay = document.getElementById('question');
 const gameTitle = document.getElementById('gameTitle');
@@ -10,6 +11,7 @@ const gameSettingsButton = document.getElementById('gameSettingsButton');
 const materialSettingsButton = document.getElementById('materialSettingsButton');
 const backToSettingsButton = document.getElementById('backToSettingsButton');
 let gameSettingsArea = document.getElementById('gameSettingsScreen');
+let materialSettingsArea = document.getElementById('materialSettingsScreen');
 const encourageMessage = document.getElementById('encouragement-message');
 let intervalSpeed; 
 let currentLevel;
@@ -43,6 +45,10 @@ gameSettingsButton.addEventListener('click', function() {
 
 backToSettingsButton.addEventListener('click', function (){
     screenSettings('settings');
+})
+
+materialSettingsButton.addEventListener('click', function() {
+    screenSettings("material");
 })
 
 resetButton.addEventListener('click', function() {
@@ -201,7 +207,7 @@ function popBalloon(balloon, isCorrect) {
         scoreDisplay.textContent = `Score: ${score}`;
         balloon.style.backgroundColor = 'green';
         showEncouragementMessage();
-        //playCheerSound();
+        playCheerSound();
         animateScore();
         createConfetti(balloon);
     } else {
@@ -222,10 +228,10 @@ function showEncouragementMessage() {
     }, 1000);
 }
 
-/*function playCheerSound() {
+function playCheerSound() {
     const cheerSound = new Audio('cheer.mp3'); // Make sure to have the cheer.mp3 file in your project
     cheerSound.play();
-}*/
+}
 
 function animateScore() {
     scoreDisplay.classList.add('scaling');
@@ -318,9 +324,13 @@ function isOverlapping(position) {
 }
 
 function screenSettings(screen) {
-    let game = "none"; let home = "none"; let gameSettings = "none"; let settings = "none";
-    if(screen == 'game') game = "block";
-    else if(screen == "gameSettings") gameSettings = "block";
+    let game = "none"; let home = "none"; let gameSettings = "none"; let settings = "none"; let material = "none";
+    if(screen == 'game'){
+        game = "block";
+    }
+    else if(screen == "gameSettings"){ 
+        gameSettings = "block";
+    }
     else if(screen == 'settings'){
         settings = "block"
         gameTitle.textContent = 'Settings';
@@ -332,8 +342,10 @@ function screenSettings(screen) {
         gameArea.innerHTML = '';
         clearInterval(interval);
     }
-    settingsMenuScreen.style.display = (screen == 'settings' || screen == 'gameSettings'? 'block' : 'none');
-    gameTitle.style.display = (screen == 'home' || screen == 'settings' ? 'block' : 'none');
+    else if(screen == 'material'){
+        material = "block";
+    }
+
     levelButtonArea.style.display = home;
     settingsButton.style.display = home;
     gameArea.style.display = game;
@@ -342,8 +354,11 @@ function screenSettings(screen) {
     backToSettingsButton.style.display = gameSettings;
     materialSettingsButton.style.display = settings;
     gameSettingsButton.style.display = settings;
-    questionDisplay.style.display = (screen == "settings" || screen == 'gameSettings' ? "none" : "block");
+    materialSettingsArea.style.display = material;
+    questionDisplay.style.display = (screen == "home" || screen == 'game' ? "block" : "none");
     backButton.style.display = (screen == "home" || screen == "gameSettings"? "none" : "block");
+    settingsMenuScreen.style.display = (screen == 'settings' || screen == 'gameSettings'? 'block' : 'none');
+    gameTitle.style.display = (screen == 'home' || screen == 'settings' ? 'block' : 'none');
 }
 
 function updateSlider(event) {

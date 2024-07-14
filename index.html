@@ -22,39 +22,39 @@
       <i class="fas fa-cog"></i>
     </button>
     <div id="settingsMenuScreen">
-        <button id="gameSettingsButton">Game Settings</button>
-        <button id="materialSettingsButton">Material Settings</button>    
+        <div class="button-container">
+          <button id="gameSettingsButton">Game Settings</button>
+          <button id="materialSettingsButton">Material Settings</button> 
+        </div>
         <button id="backToSettingsButton">Back</button>
     </div>
     <div id="gameSettingsScreen">
         <div class="column">
             <h2>Easy</h2>
+            <span class="slider-value" id="easy-speed-value">2</span>
             <div class="slider-container">
-                <span class="slider-value" id="easy-speed-value">2</span>
                 <label>Speed:
                     <input type="range" min="1" max="10" value="2" class="slider" id="easy-speed">
                 </label>
             </div>
-            
+            <span class="slider-value" id="easy-intervalSpeed-value">2</span>
             <div class="slider-container">
-                <span class="slider-value" id="easy-intervalSpeed-value">2</span>
-                <label>Interval Speed (seconds):
-                    <input type="range" min="0.1" max="2.0" step="0.1" value="2" class="slider" id="easy-intervalSpeed">
-                </label>
+              <label>Interval Speed (seconds):
+                  <input type="range" min="0.1" max="2.0" step="0.1" value="2" class="slider" id="easy-intervalSpeed">
+              </label>
             </div>
         </div>
 
         <div class="column">
             <h2>Medium</h2>
+            <span class="slider-value" id="medium-speed-value">4</span>
             <div class="slider-container">
-                <span class="slider-value" id="medium-speed-value">4</span>
                 <label>Speed:
                     <input type="range" min="1" max="10" value="4" class="slider" id="medium-speed">
                 </label>
             </div>
-          
+            <span class="slider-value" id="medium-intervalSpeed-value">1.5</span>
             <div class="slider-container">
-                <span class="slider-value" id="medium-intervalSpeed-value">1.5</span>
                 <label>Interval Speed (seconds):
                     <input type="range" min="0.1" max="2.0" step="0.1" value="1.5" class="slider" id="medium-intervalSpeed">
                 </label>
@@ -63,15 +63,14 @@
 
         <div class="column">
             <h2>Hard</h2>
+            <span class="slider-value" id="hard-speed-value">6</span>
             <div class="slider-container">
-                <span class="slider-value" id="hard-speed-value">6</span>
                 <label>Speed:
                     <input type="range" min="1" max="10" value="6" class="slider" id="hard-speed">
                 </label>
             </div> 
-            
+            <span class="slider-value" id="hard-intervalSpeed-value">0.5</span>
             <div class="slider-container">
-                <span class="slider-value" id="hard-intervalSpeed-value">0.5</span>
                 <label>Interval Speed (seconds):
                     <input type="range" min="0.1" max="2.0" step="0.1" value="0.5" class="slider" id="hard-intervalSpeed">
                 </label>
@@ -80,8 +79,47 @@
 
         <button id="resetButton">Reset</button>
     </div>
-    <div id="materialSettingsScreen"></div>
-    
+    <div id="materialSettingsScreen">
+      <h2>Content</h2>
+      <div id="contentToggleButtons">
+        <label>
+          <input type="checkbox" name="content" value="math" checked> Math
+        </label>
+        <label>
+          <input type="checkbox" name="content" value="spelling"> Spelling
+        </label>
+        <!-- Add more toggle buttons here -->
+        <label>
+          <input type="checkbox" name="content" value="science"> Science
+        </label>
+        <label>
+          <input type="checkbox" name="content" value="history"> History
+        </label>
+        <!-- Example of another button -->
+      </div>
+  
+      <h2>Grade level</h2>
+      <div id="gradeLevelDropdown">
+        <label for="gradeLevel">Select grade level:</label>
+        <select id="gradeLevel" name="gradeLevel">
+          <option value="pre-k">Pre-K</option>
+          <option value="kindergarten">Kindergarten</option>
+          <option value="1" selected>1st Grade</option>
+          <option value="2">2nd Grade</option>
+          <option value="3">3rd Grade</option>
+          <option value="4">4th Grade</option>
+          <option value="5">5th Grade</option>
+          <option value="6">6th Grade</option>
+          <option value="7">7th Grade</option>
+          <option value="8">8th Grade</option>
+          <option value="9">9th Grade</option>
+          <option value="10">10th Grade</option>
+          <option value="11">11th Grade</option>
+          <option value="12">12th Grade</option>
+        </select>
+      </div>
+    </div>
+
     <button id="backButton">Back to Home</button>
     <script src="script.js"></script>
 </body>
