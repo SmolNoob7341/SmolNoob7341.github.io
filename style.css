@@ -1,0 +1,443 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+}
+
+/* Styles for larger screens (computers) */
+@media (min-width: 768px) {
+  h1 {
+    margin-bottom: 10px;
+  }
+
+  #question {
+    margin: 10px;
+    font-size: 32px;
+  }
+
+  #game-area {
+    position: relative;
+    width: 90%;
+    height: 75vh;
+    border: 2px solid #000;
+    background-color: #fff;
+    overflow: hidden;
+  }
+
+  .balloon {
+    position: absolute;
+    width: 50px;
+    height: 80px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+  }
+
+  .balloon::before {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    width: 2px;
+    height: 20px;
+    background-color: black;
+  }
+
+  #score {
+    margin-top: 10px;
+    font-size: 36px;
+  }
+
+  .difficulty-button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 25px;
+  }
+
+  button {
+    cursor: pointer;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    padding: 15px 20px;
+    font-size: 20px;
+    margin: 10px;
+  }
+
+  #backButton,
+  #backToSettingsButton {
+    position: fixed;
+    top: 20px;
+    right: 15px;
+  }
+
+  .settings-btn {
+    background-color: #929292;
+    border: none;
+    color: white;
+    padding: 10px 13px;
+    text-align: center;
+    display: inline-block;
+    font-size: 35px;
+    border-radius: 5px;
+    cursor: pointer;
+    position: fixed;
+    top: 20px;
+    left: 15px;
+  }
+
+  .container {
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .labels {
+    display: inline-block;
+    margin: 5px 20vh;
+    padding: 10px;
+    box-sizing: border-box;
+    font-size: 30px;
+  }
+
+  .slider-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .slider-value {
+    margin-bottom: 10px;
+    background-color: white;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+
+  .slider {
+    width: 150%; /* Full width of the container */
+    max-width: 180px; /* Optional max width */
+  }
+
+  #resetButton {
+    margin-top: 20px; /* Space above the reset button */
+    padding: 10px 20px;
+    font-size: 20px;
+  }
+
+  #gameSettingsScreen {
+    display: flex;
+    justify-content: space-between; /* Space between columns */
+    width: 100%; /* Full width */
+    align-items: center;
+    text-align: center;
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column; /* Stack h2 and sliders vertically */
+    flex: 1; /* Allow each column to take equal space */
+    margin: 0 10px; /* Margin between columns */
+    align-items: center; /* Center content within the column */
+  }
+
+  h2 {
+    margin-bottom: 10px; /* Space between h2 and slider container */
+    font-size: 24px; /* Adjust size as needed */
+    text-align: center; /* Center the heading text */
+  }
+
+  #encouragement-message {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 36px;
+    font-weight: bold;
+    color: green;
+    display: none;
+    z-index: 10;
+  }
+
+  .confetti {
+    position: absolute;
+    width: 6px;
+    height: 10px;
+    background-color: #ff0;
+    animation: confetti-explode 2s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
+    pointer-events: none;
+    opacity: 0;
+    transform: rotate(0deg);
+  }
+
+  @keyframes confetti-explode {
+    0% {
+      opacity: 1;
+      transform: translate(0, 0) rotate(0deg);
+    }
+    50% {
+      transform: translate(var(--translate-x), var(--translate-y)) rotate(180deg);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(var(--translate-x), calc(var(--translate-y) + 100px)) rotate(360deg);
+    }
+  }
+
+  @keyframes confetti-fall {
+    0% {
+      opacity: 1;
+      transform: translateY(0) rotate(0deg);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(100px) rotate(720deg);
+    }
+  }
+
+  @keyframes scale-up {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.5);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  #score.scaling {
+    animation: scale-up 0.5s ease-in-out;
+  }
+
+  #settingsMenuScreen {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+/* Styles for mobile devices */
+@media (max-width: 767px) {
+  h1 {
+    margin-bottom: 1vh;
+  }
+
+  #question {
+    margin: 2vh 0;
+    font-size: 5vw;
+  }
+
+  #game-area {
+    position: relative;
+    width: 90%;
+    height: 75vh;
+    border: 2px solid #000;
+    background-color: #fff;
+    overflow: hidden;
+  }
+
+  .balloon {
+    position: absolute;
+    width: 7vw;
+    height: 8vh;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4vw;
+    color: white;
+  }
+
+  .balloon::before {
+    content: '';
+    position: absolute;
+    bottom: -2vh;
+    left: 50%;
+    width: 0.2vw;
+    height: 2vh;
+    background-color: black;
+  }
+
+  #score {
+    margin-top: 1vh;
+    font-size: 6vw;
+  }
+
+  .difficulty-button {
+    margin: 2vh 0;
+    padding: 2vh 4vw;
+    font-size: 4vw;
+  }
+
+  button {
+    cursor: pointer;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    padding: 2vh 4vw;
+    font-size: 4vw;
+    margin: 1vh;
+  }
+
+  #backButton,
+  #backToSettingsButton {
+    position: fixed;
+    top: 0.5vh;
+    right: 0.5vw;
+    font-size: 20px;
+  }
+
+  .settings-btn {
+    background-color: #929292;
+    border: none;
+    color: white;
+    padding: 2vh 3vw;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 6vw;
+    border-radius: 5px;
+    cursor: pointer;
+    position: fixed;
+    top: 2vh;
+    left: 2vw;
+  }
+
+  .container {
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .labels {
+    display: inline-block;
+    margin: 1vh 5vw;
+    padding: 1vh;
+    box-sizing: border-box;
+    font-size: 2vw;
+  }
+
+  .slider-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column; /* Change to row for horizontal alignment */
+    align-items: flex-start;
+  }
+
+  .slider-value {
+    margin-bottom: 1vh;
+    background-color: white;
+    padding: 0.5vh 1vw;
+    border-radius: 4px;
+    font-weight: bold;
+    margin-right: 1vw; /* Add margin-right for spacing */
+  }
+
+  .slider {
+    width: 100%; /* Make all sliders full width of their container */
+    max-width: 180px; /* Optional: set a maximum width if desired */
+  }
+
+  #gameSettingsScreen {
+    display: block;
+    max-height: 80vh; /* Remove height limit for smaller screens */
+    overflow-y: auto; /* Enable scrolling for smaller screens */
+    margin-left: 10vw;
+
+  }
+
+  #gameSettingsScreen .column {
+    width: 100%; /* Each column takes full width */
+  }
+
+  #gameSettingsScreen .column * {
+    font-size: 1em;
+    margin: 5px 0;
+  }
+
+  #encouragement-message {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 36px;
+    font-weight: bold;
+    color: green;
+    display: none;
+    z-index: 10;
+  }
+
+  .confetti {
+    position: absolute;
+    width: 6px;
+    height: 10px;
+    background-color: #ff0;
+    animation: confetti-explode 2s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
+    pointer-events: none;
+    opacity: 0;
+    transform: rotate(0deg);
+  }
+
+  @keyframes confetti-explode {
+    0% {
+      opacity: 1;
+      transform: translate(0, 0) rotate(0deg);
+    }
+    50% {
+      transform: translate(var(--translate-x), var(--translate-y)) rotate(180deg);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(var(--translate-x), calc(var(--translate-y) + 100px)) rotate(360deg);
+    }
+  }
+
+  @keyframes confetti-fall {
+    0% {
+      opacity: 1;
+      transform: translateY(0) rotate(0deg);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(100px) rotate(720deg);
+    }
+  }
+
+  @keyframes scale-up {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.5);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  #score.scaling {
+    animation: scale-up 0.5s ease-in-out;
+  }
+
+  #settingsMenuScreen {
+    display: flex;
+  }
+}
