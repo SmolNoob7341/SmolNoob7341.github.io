@@ -1,0 +1,95 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  padding: 0;
+  overflow: hidden;
+
+}
+
+.project {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    margin: 10px 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.active {
+  display: flex;
+}
+
+.inactive {
+  display: none;
+}
+
+.homePage {
+  flex-direction: column;
+  text-align: center;
+}
+
+button {
+  cursor: pointer;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  padding: 15px 20px;
+  font-size: 30px;
+  margin: 10px;
+}
+
+.settings-btn {
+  background-color: #929292;
+  border: none;
+  color: white;
+  padding: 10px 13px;
+  text-align: center;
+  display: inline-block;
+  border-radius: 5px;
+  cursor: pointer;
+  position: fixed;
+  top: 20px;
+  left: 15px;
+}
+
+/* Styles for larger devices(Computers) */
+@media (min-width: 768px){
+  .backButton {
+    position: fixed;
+    top: 20px;
+    right: 15px;
+    font-size: 30px;
+  }
+  
+  .settings-btn {
+    font-size: 50px;
+  }
+}
+
+/* Styles for mobile devices */
+@media (max-width: 767px){
+  .backButton {
+    position: fixed;
+    top: 20px;
+    right: 15px;
+    font-size: 15px;
+  }
+  
+  .settings-btn {
+    font-size: 35px;
+  }
+}

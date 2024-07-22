@@ -1,0 +1,145 @@
+.quizGame .question {
+  font-size: 24px;
+}
+
+.quizGame .screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+}
+
+.quizGame .screen.active {
+  display: flex;
+}
+
+.quizGame .submitButton {
+  cursor: pointer;
+  color: black;
+  transition: background-color 0.3s;
+  padding: 5px 10px;
+  font-size: 12px;
+  margin: 10px;
+}
+
+.quizGame button{
+  cursor: pointer;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  padding: 15px 30px;
+  font-size: 20px;
+  margin: 10px;
+}
+
+.quizGame button:hover {
+  background-color: #0056b3;
+}
+
+.quizGame .grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+}
+
+.quizGame #balloon-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9998;
+}
+
+.quizGame .balloon {
+  position: absolute;
+  bottom: -100px;
+  width: 50px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: red;
+  box-shadow: inset -10px -20px 0 rgba(0, 0, 0, 0.1);
+}
+
+.quizGame .balloon::before {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  width: 2px;
+  height: 20px;
+  background-color: black;
+}
+
+.quizGame .backButton {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+}
+
+.quizGame .backToMenuButton {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+}
+
+.quizGame #moreOptionsButton {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+}
+
+.quizGame .selected {
+  background-color: #002e7a;
+}
+
+.quizGame .correct {
+  background-color: green;
+}
+
+.quizGame .incorrect {
+  background-color: red;
+}
+
+.quizGame #dragAndDropContainer .options-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.quizGame #dragAndDropContainer .drop-area {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  border: 2px dashed #007BFF;
+  padding: 20px;
+}
+
+.quizGame #dragAndDropContainer .drop-area .drop-zone {
+  width: 100px;
+  height: 100px;
+  border: 2px solid #007BFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.quizGame #dragAndDropContainer .draggable {
+  width: 100px;
+  height: 100px;
+  border: 2px solid #007BFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: grab;
+}
+
+.quizGame #dragAndDropContainer .draggable.dragging {
+  opacity: 0.5;
+}

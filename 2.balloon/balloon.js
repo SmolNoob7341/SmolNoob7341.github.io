@@ -1,18 +1,14 @@
 const gameArea = document.getElementById('game-area');
-
 const scoreDisplay = document.getElementById('score');
 const questionDisplay = document.getElementById('question');
 const gameTitle = document.getElementById('gameTitle');
 const backButton = document.getElementById('backButton');
 const levelButtonArea = document.getElementById("level-select");
-const settingsButton = document.getElementById('settingsButton');
+const settingsButton = document.getElementById('gameSettingsButton');
 const resetButton = document.getElementById('resetButton');
-const gameSettingsButton = document.getElementById('gameSettingsButton');
-const materialSettingsButton = document.getElementById('materialSettingsButton');
-const backToSettingsButton = document.getElementById('backToSettingsButton');
 let gameSettingsArea = document.getElementById('gameSettingsScreen');
-let materialSettingsArea = document.getElementById('materialSettingsScreen');
 const encourageMessage = document.getElementById('encouragement-message');
+const backToMenus = document.getElementById("backToMenuButton");
 let intervalSpeed; 
 let currentLevel;
 let isFirstTime = true;
@@ -38,18 +34,6 @@ backButton.addEventListener('click', function () {
 settingsButton.addEventListener('click', function() {
     screenSettings("settings");
 });
-
-gameSettingsButton.addEventListener('click', function() {
-    screenSettings("gameSettings");
-})
-
-backToSettingsButton.addEventListener('click', function (){
-    screenSettings('settings');
-})
-
-materialSettingsButton.addEventListener('click', function() {
-    screenSettings("material");
-})
 
 resetButton.addEventListener('click', function() {
     settingsConfig = {
@@ -206,11 +190,12 @@ function popBalloon(balloon, isCorrect) {
     if (isCorrect) {
         scoreDisplay.textContent = `Score: ${score}`;
         balloon.style.backgroundColor = 'green';
+        //playSound("correct");
         showEncouragementMessage();
-        playCheerSound();
         animateScore();
         createConfetti(balloon);
     } else {
+        playSound("wrong");
         balloon.style.backgroundColor = 'red';
     }
     setTimeout(() => {
@@ -228,8 +213,13 @@ function showEncouragementMessage() {
     }, 1000);
 }
 
-function playCheerSound() {
-    const cheerSound = new Audio('cheer.mp3'); // Make sure to have the cheer.mp3 file in your project
+function playSound(type) {
+    let cheerSound = 0;
+    if(type == "correct"){
+        cheerSound = new Audio('yay.mp3');
+    }else{
+        cheerSound = new Audio('error.mp3');
+    }
     cheerSound.play();
 }
 
@@ -324,12 +314,9 @@ function isOverlapping(position) {
 }
 
 function screenSettings(screen) {
-    let game = "none"; let home = "none"; let gameSettings = "none"; let settings = "none"; let material = "none";
+    let game = "none"; let home = "none"; let settings = "none";
     if(screen == 'game'){
         game = "block";
-    }
-    else if(screen == "gameSettings"){ 
-        gameSettings = "block";
     }
     else if(screen == 'settings'){
         settings = "block"
@@ -342,22 +329,15 @@ function screenSettings(screen) {
         gameArea.innerHTML = '';
         clearInterval(interval);
     }
-    else if(screen == 'material'){
-        material = "block";
-    }
 
+    backToMenus.style.display = home;
     levelButtonArea.style.display = home;
     settingsButton.style.display = home;
     gameArea.style.display = game;
     scoreDisplay.style.display = game;
-    gameSettingsArea.style.display = gameSettings;  
-    backToSettingsButton.style.display = gameSettings;
-    materialSettingsButton.style.display = settings;
-    gameSettingsButton.style.display = settings;
-    materialSettingsArea.style.display = material;
+    gameSettingsArea.style.display = settings;  
     questionDisplay.style.display = (screen == "home" || screen == 'game' ? "block" : "none");
-    backButton.style.display = (screen == "home" || screen == "gameSettings"? "none" : "block");
-    settingsMenuScreen.style.display = (screen == 'settings' || screen == 'gameSettings'? 'block' : 'none');
+    backButton.style.display = (screen == "home" ? "none" : "block");
     gameTitle.style.display = (screen == 'home' || screen == 'settings' ? 'block' : 'none');
 }
 
